@@ -1,0 +1,6 @@
+
+<resources>
+    <dimen name="medium">22sp</dimen>
+    <dimen name="regular">16sp</dimen>
+    <dimen name="regular_s">12sp</dimen>
+</resources>

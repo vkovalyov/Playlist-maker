@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/setting"
-    style="@style/SettingActivity"
-    >
+    style="@style/SettingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -32,15 +31,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="61dp"
+            android:layout_marginTop="24dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
-
                 style="@style/SettingMenuItem"
-                android:text="@string/dark_theme"
-
-                />
+                android:text="@string/dark_theme" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch1"

@@ -20,41 +20,43 @@
             app:title="@string/search" />
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="start"
-        android:orientation="horizontal"
-        android:paddingTop="56dp"
-
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+        <EditText
+            android:id="@+id/searchInput"
             style="@style/Search"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/round"
+            android:drawableStart="@drawable/search_icon"
+            android:drawablePadding="8dp"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:paddingVertical="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor"
+            app:icon="@drawable/search_icon" />
 
-            >
+        <ImageView
+            android:id="@+id/clear_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/close"
+            android:visibility="gone"
+            />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/searchInput"
-                style="@style/Search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/search"
-                android:padding="8dp"
-                android:paddingStart="40dp"
-                android:singleLine="true"
-                app:boxBackgroundMode="outline"
-
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

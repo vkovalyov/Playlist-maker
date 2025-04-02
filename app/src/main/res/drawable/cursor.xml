@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:width="2dp" /> <!-- Ширина курсора -->
+    <solid android:color="@color/blue" /> <!-- Цвет курсора -->
+</shape>

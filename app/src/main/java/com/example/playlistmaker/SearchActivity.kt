@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+
+
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.textfield.TextInputLayout
 
 
 const val SEARCH_TEXT = "search_text"
@@ -19,11 +23,6 @@ const val SEARCH_TEXT = "search_text"
 class SearchActivity : AppCompatActivity() {
 
     private var searchText: String = ""
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchText = savedInstanceState.putString(SEARCH_TEXT, searchText).toString()
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -45,16 +44,11 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (toolbar != null) {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
-        val inputEditLayout = findViewById<TextInputLayout>(R.id.textInputLayout)
         val inputEditText = findViewById<EditText>(R.id.searchInput)
-
-        inputEditLayout.isEndIconVisible = false
+        val clearButton = findViewById<ImageView>(R.id.clear_icon)
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -66,16 +60,22 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                inputEditLayout.isEndIconVisible = !s.isNullOrEmpty()
-                searchText = s.toString()
+                if (s.isNullOrEmpty()) {
+                    clearButton.visibility =
+                        View.GONE
+                } else {
+                    clearButton.visibility = View.VISIBLE
+                    searchText = s.toString()
+                }
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-
-
-        inputEditLayout.setEndIconOnClickListener {
-            inputEditText.text?.clear()
+        clearButton.setOnClickListener() {
+            inputEditText.text.clear()
+            clearButton.visibility = View.GONE
         }
+
+
     }
 
 

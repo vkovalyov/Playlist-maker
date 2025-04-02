@@ -30,22 +30,19 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-
-        if (toolbar != null) {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val btnSearch = findViewById<LinearLayout>(R.id.share)
-        val btnMedia = findViewById<LinearLayout>(R.id.support)
-        val btnSetting = findViewById<LinearLayout>(R.id.agreement)
-
         btnSearch.setOnClickListener(this@SettingsActivity)
+
+        val btnMedia = findViewById<LinearLayout>(R.id.support)
         btnMedia.setOnClickListener(this@SettingsActivity)
+
+        val btnSetting = findViewById<LinearLayout>(R.id.agreement)
         btnSetting.setOnClickListener(this@SettingsActivity)
 
         val switch = findViewById<SwitchCompat>(R.id.switch1)
-
         switch.setChecked(isDarkThemeEnabled());
 
         switch.setOnCheckedChangeListener { _, isChecked ->

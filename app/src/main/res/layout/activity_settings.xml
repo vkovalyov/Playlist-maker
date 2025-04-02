@@ -3,32 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/setting"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    style="@style/SettingActivity"
+    >
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        >
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="@string/settings"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/medium" />
-
-    </LinearLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/AppBar"
+            app:title="@string/settings" />
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <LinearLayout
@@ -48,185 +36,70 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/dark_theme"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/regular" />
 
-            <Switch
+                style="@style/SettingMenuItem"
+                android:text="@string/dark_theme"
+
+                />
+
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/Switch"
                 android:text="Switch"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/share"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/share"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/regular" />
+                style="@style/SettingMenuItem"
+                android:text="@string/share" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                style="@style/IconColor"
                 android:src="@drawable/share"
                 tools:ignore="ImageContrastCheck" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/support"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/write_support"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/regular" />
+                style="@style/SettingMenuItem"
+                android:text="@string/write_support" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                style="@style/IconColor"
                 android:src="@drawable/support" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/agreement"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/agreement"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/regular" />
+                style="@style/SettingMenuItem"
+                android:text="@string/agreement" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                style="@style/IconColor"
                 android:src="@drawable/arrow" />
         </LinearLayout>
 
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
-            android:background="@color/light_grey"
-            android:gravity="center"
-            android:orientation="vertical"></LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/search" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/regular_s" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/media" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/media"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/regular_s" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:tint="@color/background"
-                    android:src="@drawable/setting" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="@string/settings"
-                    android:textColor="@color/background"
-                    android:textSize="@dimen/regular_s" />
-            </LinearLayout>
-
-            />
-        </LinearLayout>
-
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

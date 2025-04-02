@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
-import androidx.activity.addCallback
-
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -83,22 +81,12 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.support -> {
-                val recipientEmail = getString(R.string.mail_student)
-
-                val mailUri = Uri.parse("mailto:$recipientEmail")
-                    .buildUpon()
-                    .appendQueryParameter(
-                        getString(R.string.subject),
-                        getString(R.string.subject_title)
-                    )
-                    .appendQueryParameter(
-                        getString(R.string.body),
-                        getString(R.string.body_title)
-                    )
-                    .build()
-
-                val emailIntent = Intent(Intent.ACTION_SENDTO, mailUri)
-                startActivity(emailIntent)
+                val intent = Intent(Intent.ACTION_SEND,)
+                intent.setType("text/plain")
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf( getString(R.string.mail_student)))
+                intent.putExtra(Intent.EXTRA_SUBJECT,   getString(R.string.subject_title)) // Тема
+                intent.putExtra(Intent.EXTRA_TEXT,   getString(R.string.body_title)) // Тело письма
+                startActivity(Intent.createChooser(intent, ""))
             }
 
             R.id.agreement -> {

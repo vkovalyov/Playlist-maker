@@ -1,19 +1,18 @@
 package com.example.playlistmaker
 
+
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-
-
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -73,9 +72,16 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener() {
             inputEditText.text.clear()
             clearButton.visibility = View.GONE
+
+            clearFocus(inputEditText)
         }
+    }
 
 
+    private fun clearFocus(inputEditText: EditText) {
+        inputEditText.clearFocus()
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(inputEditText.windowToken, 0)
     }
 
 

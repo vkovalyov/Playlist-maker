@@ -7,7 +7,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.models.Track
 
 class TrackAdapter(
-    private val tracks: List<Track>
+    private var tracks: List<Track>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -20,4 +20,9 @@ class TrackAdapter(
     }
 
     override fun getItemCount() = tracks.size
+
+    fun updateData(tracks: List<Track>) {
+        this.tracks = tracks
+        notifyDataSetChanged()
+    }
 }

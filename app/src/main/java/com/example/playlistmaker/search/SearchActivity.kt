@@ -28,6 +28,7 @@ import retrofit2.Response
 
 
 const val SEARCH_TEXT = "search_text"
+const val MUSIC_TRACK = "musicTrack"
 
 class SearchActivity : AppCompatActivity() {
 
@@ -36,6 +37,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchNotFound: LinearLayout
     private lateinit var recycler: RecyclerView
     private lateinit var inputEditText: EditText
+
+    private lateinit var adapter: TrackAdapter
 
     private var searchText: String = ""
 
@@ -72,6 +75,8 @@ class SearchActivity : AppCompatActivity() {
 
         recycler = findViewById(R.id.trackList)
         recycler.layoutManager = LinearLayoutManager(this)
+        adapter = TrackAdapter(listOf())
+        recycler.adapter = adapter
 
         val clearButton = findViewById<ImageView>(R.id.clear_icon)
         val simpleTextWatcher = object : TextWatcher {
@@ -119,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
         searchNotFound.visibility = View.GONE
         recycler.visibility = View.GONE
 
-        musicApiService.searchMusic(searchText.trim(), "musicTrack")
+        musicApiService.searchMusic(searchText.trim(), MUSIC_TRACK)
             .enqueue(object : Callback<ITunesResponse> {
                 override fun onResponse(
                     call: Call<ITunesResponse>,
@@ -135,7 +140,8 @@ class SearchActivity : AppCompatActivity() {
                                 searchNotFound.visibility = View.VISIBLE
                             } else {
                                 recycler.visibility = View.VISIBLE
-                                recycler.adapter = TrackAdapter(music)
+                                adapter.updateData(music)
+
                             }
                         }
 

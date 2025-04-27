@@ -26,4 +26,7 @@
         Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="error_check_internet"> Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="refresh">Обновить</string>
+
+    <string name="you_looking_for">Вы искали</string>
+    <string name="clear_history">  Очистить историю</string>
 </resources>

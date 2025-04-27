@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -19,6 +18,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var time: TextView = itemView.findViewById(R.id.time)
     private var trackLabel: ImageView = itemView.findViewById(R.id.trackLabel)
 
+
     fun bind(model: Track) {
         trackName.text = model.trackName
         artistName.text = model.artistName
@@ -34,5 +34,10 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .transform(RoundedCorners(2))
             .into(trackLabel)
 
+        itemView.setOnClickListener {
+            //Log.v("trackName", model.trackName)
+            SearchManager.addTrackToHistory(model)
+        }
     }
+
 }

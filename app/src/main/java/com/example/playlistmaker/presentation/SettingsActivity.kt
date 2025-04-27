@@ -14,12 +14,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
-
+import com.example.playlistmaker.sharedPreferences.SharedPreferencesUtil
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.setting)) { v, insets ->
@@ -50,6 +51,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setAppTheme(isDarkModeOn: Boolean) {
+        SharedPreferencesUtil.setAppTheme(isDarkModeOn)
+
         if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
@@ -82,11 +85,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.support -> {
-                val intent = Intent(Intent.ACTION_SEND,)
+                val intent = Intent(Intent.ACTION_SEND)
                 intent.setType("text/plain")
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf( getString(R.string.mail_student)))
-                intent.putExtra(Intent.EXTRA_SUBJECT,   getString(R.string.subject_title)) // Тема
-                intent.putExtra(Intent.EXTRA_TEXT,   getString(R.string.body_title)) // Тело письма
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_student)))
+                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_title)) // Тема
+                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.body_title)) // Тело письма
                 startActivity(Intent.createChooser(intent, ""))
             }
 

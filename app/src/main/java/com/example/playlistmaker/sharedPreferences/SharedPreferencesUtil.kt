@@ -29,7 +29,7 @@ object SharedPreferencesUtil {
     }
 
     fun getHistory(): String? {
-        return sp.getString(HISTORY, "")
+        return sp.getString(HISTORY, null)
     }
 
     fun clearHistory() {

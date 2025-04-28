@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search
 
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -40,6 +39,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             SearchManager.addTrackToHistory(model)
             val newModel = model.copy(
+                collectionName = "sdf slkdf gsdfk24 wer sd cvxxc xcv xcv ghjttrcyctyr tcyrexre txrxtrxy ytrx",
                 artworkUrl100 = model.artworkUrl100.replaceAfterLast(
                     '/',
                     "512x512bb.jpg"

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +13,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.models.ITunesResponse
 import com.example.playlistmaker.retrofit.musicApiService
-import com.example.playlistmaker.sharedPreferences.SharedPreferencesUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,6 +66,8 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             insets
         }
 
+
+
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString(SEARCH_TEXT).toString()
         }
@@ -82,6 +81,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
         searchNotFound = findViewById(R.id.search_not_found)
         progressBar = findViewById(R.id.progressBar)
         tracksHistory = findViewById(R.id.tracks_history)
+
 
 
         btnClearHistory.setOnClickListener(this@SearchActivity)

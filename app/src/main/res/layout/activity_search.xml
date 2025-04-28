@@ -9,8 +9,8 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="top"
     android:orientation="vertical"
-    android:layout_gravity="center"
     tools:context=".search.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -73,16 +73,24 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <include
-        layout="@layout/search_error"
-        android:id="@+id/search_error"
-        android:layout_marginHorizontal="24dp"
+        android:id="@+id/tracks_history"
+        layout="@layout/tracks_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
         android:visibility="gone" />
 
     <include
-        layout="@layout/search_not_found"
+        android:id="@+id/search_error"
+        layout="@layout/search_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="24dp"
+        android:visibility="gone" />
+
+    <include
         android:id="@+id/search_not_found"
+        layout="@layout/search_not_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
@@ -92,8 +100,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ProgressBar
             style="?android:attr/progressBarStyle"

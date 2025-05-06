@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search
 
-import android.util.Log
+import android.content.Intent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.models.Track
+import com.example.playlistmaker.track.TrackActivity
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,12 +33,22 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .centerCrop()
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)
-            .transform(RoundedCorners(2))
+            .transform(RoundedCorners(8))
             .into(trackLabel)
 
         itemView.setOnClickListener {
-            //Log.v("trackName", model.trackName)
             SearchManager.addTrackToHistory(model)
+            val newModel = model.copy(
+                artworkUrl100 = model.artworkUrl100.replaceAfterLast(
+                    '/',
+                    "512x512bb.jpg"
+                )
+            )
+            val intent = Intent(itemView.context, TrackActivity::class.java)
+            val gson = Gson()
+            val json = gson.toJson(newModel)
+            intent.putExtra("track", json)
+            itemView.context.startActivity(intent)
         }
     }
 

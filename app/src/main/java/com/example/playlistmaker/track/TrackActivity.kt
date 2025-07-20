@@ -1,6 +1,9 @@
 package com.example.playlistmaker.track
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.View.GONE
 import android.widget.ImageView
@@ -23,6 +26,19 @@ import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private val gson = Gson()
+    private var mediaPlayer = MediaPlayer()
+    private lateinit var play: ImageView
+    private lateinit var lastDuration: TextView
+    private var playerState = MediaPlayerState.STATE_DEFAULT
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateRunnable = object : Runnable {
+        override fun run() {
+
+            handler.postDelayed(this, 300)
+            updateTime()
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,9 +78,9 @@ class TrackActivity : AppCompatActivity() {
         val duration = findViewById<TextView>(R.id.duration_track)
         duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
-        val lastDuration = findViewById<TextView>(R.id.last_duration)
-        lastDuration.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        lastDuration = findViewById(R.id.last_duration)
+        lastDuration.text = "00:00"
+        //SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
 
 
         if (track.collectionName == null) {
@@ -103,7 +119,65 @@ class TrackActivity : AppCompatActivity() {
             country.text = track.country
         }
 
+        play = findViewById(R.id.play)
 
+        play.setOnClickListener {
+            playbackControl()
+        }
+        preparePlayer(track.previewUrl)
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            MediaPlayerState.STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            MediaPlayerState.STATE_PREPARED, MediaPlayerState.STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        playerState = MediaPlayerState.STATE_PLAYING
+        play.setImageResource(R.drawable.pause)
+
+        handler.post(updateRunnable)
+        mediaPlayer.currentPosition
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playerState = MediaPlayerState.STATE_PAUSED
+        play.setImageResource(R.drawable.play)
+        handler.removeCallbacks(updateRunnable)
+    }
+
+    private fun preparePlayer(url: String) {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playerState = MediaPlayerState.STATE_PREPARED
+        }
+
+        mediaPlayer.setOnCompletionListener {
+            playerState = MediaPlayerState.STATE_PREPARED
+        }
+
+        mediaPlayer.setOnCompletionListener {
+            playerState = MediaPlayerState.STATE_PAUSED
+            play.setImageResource(R.drawable.play)
+            handler.removeCallbacks(updateRunnable)
+            lastDuration.text = "00:00"
+        }
+    }
+
+    private fun updateTime() {
+        lastDuration.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+                .toString()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,5 +186,17 @@ class TrackActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
+        handler.removeCallbacks(updateRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+        handler.removeCallbacks(updateRunnable)
     }
 }

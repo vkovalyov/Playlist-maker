@@ -123,4 +123,12 @@
         <item name="iconGravity">textStart</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="PlayButton">
+        <item name="android:src">@drawable/play</item>
+    </style>
+
+    <style name="PauseButton">
+        <item name="android:src">@drawable/pause</item>
+    </style>
 </resources>

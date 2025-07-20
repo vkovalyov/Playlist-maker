@@ -2,6 +2,8 @@ package com.example.playlistmaker.search
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
@@ -27,7 +29,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val SEARCH_TEXT = "search_text"
 private const val MUSIC_TRACK = "musicTrack"
 
@@ -43,6 +45,9 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var historyAdapter: TrackAdapter
 
     private var searchText: String = ""
+
+    private val searchRunnable = Runnable { sendRequest() }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -107,7 +112,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -156,6 +161,11 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
         }
 
 
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun sendRequest() {

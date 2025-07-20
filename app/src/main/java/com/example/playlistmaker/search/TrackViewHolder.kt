@@ -1,6 +1,8 @@
 package com.example.playlistmaker.search
 
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +15,13 @@ import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+
+private const val CLICK_DEBOUNCE_DELAY = 1000L
+
+private var isClickAllowed = true
+
+private val handler = Handler(Looper.getMainLooper())
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var artistName: TextView = itemView.findViewById(R.id.artistName)
@@ -37,6 +46,13 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(trackLabel)
 
         itemView.setOnClickListener {
+            val current = isClickAllowed
+
+            if (isClickAllowed) {
+                isClickAllowed = false
+                handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            }
+
             SearchManager.addTrackToHistory(model)
             val newModel = model.copy(
                 artworkUrl100 = model.artworkUrl100.replaceAfterLast(

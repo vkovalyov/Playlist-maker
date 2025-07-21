@@ -1,17 +1,17 @@
-package com.example.playlistmaker.search
+package com.example.playlistmaker.data.repository
 
-import com.example.playlistmaker.models.Track
-import com.example.playlistmaker.sharedPreferences.SharedPreferencesUtil
+import com.example.playlistmaker.cache.SharedPreferencesUtil
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 private const val MAX_HISTORY_SIZE = 10
 
-object SearchManager {
+class SearchHistoryRepositoryImpl() : SearchHistoryRepository {
     private val gson = Gson()
 
-
-    fun getHistory(): List<Track> {
+    override fun getHistory(): List<Track> {
         val historyString = SharedPreferencesUtil.getHistory()
         val tracks: MutableList<Track>
 
@@ -25,7 +25,7 @@ object SearchManager {
         return tracks
     }
 
-    fun addTrackToHistory(track: Track): List<Track> {
+    override fun addTrackToHistory(track: Track): List<Track> {
         val historyString = SharedPreferencesUtil.getHistory()
 
         val tracks: MutableList<Track>
@@ -52,7 +52,8 @@ object SearchManager {
         return getHistory()
     }
 
-    fun clearHistory() {
+    override fun clearHistory() {
         SharedPreferencesUtil.clearHistory()
     }
+
 }

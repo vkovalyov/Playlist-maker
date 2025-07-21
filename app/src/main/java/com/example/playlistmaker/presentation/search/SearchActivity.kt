@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search
+package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.os.Bundle
@@ -22,18 +22,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.models.ITunesResponse
-import com.example.playlistmaker.retrofit.musicApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.playlistmaker.domain.interactor.MusicInteractor
+import com.example.playlistmaker.domain.interactor.SearchHistoryInteractor
+import com.example.playlistmaker.domain.models.Track
 
 private const val SEARCH_DEBOUNCE_DELAY = 2000L
 private const val SEARCH_TEXT = "search_text"
 private const val MUSIC_TRACK = "musicTrack"
 
 class SearchActivity : AppCompatActivity(), View.OnClickListener {
+    private val historyInteractor: SearchHistoryInteractor =
+        Creator.provideSearchHistoryInteractor()
 
     private lateinit var progressBar: LinearLayout
     private lateinit var searchError: LinearLayout
@@ -71,8 +72,6 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             insets
         }
 
-
-
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString(SEARCH_TEXT).toString()
         }
@@ -86,8 +85,6 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
         searchNotFound = findViewById(R.id.search_not_found)
         progressBar = findViewById(R.id.progressBar)
         tracksHistory = findViewById(R.id.tracks_history)
-
-
 
         btnClearHistory.setOnClickListener(this@SearchActivity)
 
@@ -133,7 +130,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             clearButton.visibility = View.GONE
             clearFocus(inputEditText)
             recycler.visibility = View.GONE
-            historyAdapter.updateData(SearchManager.getHistory())
+            historyAdapter.updateData(historyInteractor.getHistory())
             tracksHistory.visibility = View.VISIBLE
 
         }
@@ -148,7 +145,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
         inputEditText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && inputEditText.text.isEmpty()) {
                 tracksHistory.visibility = View.VISIBLE
-                val history = SearchManager.getHistory()
+                val history = historyInteractor.getHistory()
                 if (history.isNotEmpty()) {
                     historyAdapter.updateData(history)
                     tracksHistory.visibility = View.VISIBLE
@@ -175,37 +172,26 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
         searchNotFound.visibility = View.GONE
         recycler.visibility = View.GONE
 
-        musicApiService.searchMusic(searchText.trim(), MUSIC_TRACK)
-            .enqueue(object : Callback<ITunesResponse> {
-                override fun onResponse(
-                    call: Call<ITunesResponse>,
-                    response: Response<ITunesResponse>
-                ) {
-                    progressBar.visibility = View.GONE
+        val useCase = Creator.provideMusicInteractor()
+        try {
+            useCase.searchMusic(MUSIC_TRACK, searchText, object : MusicInteractor.MusicConsumer {
+                override fun consume(foundMusic: List<Track>) {
+                    runOnUiThread {
+                        if (foundMusic.isEmpty()) {
+                            searchNotFound.visibility = View.VISIBLE
+                        } else {
+                            recycler.visibility = View.VISIBLE
+                            adapter.updateData(foundMusic)
 
-                    if (response.isSuccessful) {
-                        val music = response.body()?.results
-
-                        if (music != null) {
-                            if (music.isEmpty()) {
-                                searchNotFound.visibility = View.VISIBLE
-                            } else {
-                                recycler.visibility = View.VISIBLE
-                                adapter.updateData(music)
-
-                            }
                         }
-
-                    } else {
-                        searchError.visibility = View.VISIBLE
                     }
                 }
-
-                override fun onFailure(p0: Call<ITunesResponse>, t: Throwable) {
-                    progressBar.visibility = View.GONE
-                    searchError.visibility = View.VISIBLE
-                }
             })
+        } catch (_: Exception) {
+            progressBar.visibility = View.GONE
+            searchError.visibility = View.VISIBLE
+        }
+
     }
 
 
@@ -227,7 +213,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_clear_history -> {
-                SearchManager.clearHistory()
+                historyInteractor.clearHistory()
                 tracksHistory.visibility = View.GONE
             }
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.sharedPreferences
+package com.example.playlistmaker.cache
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,7 +10,6 @@ object SharedPreferencesUtil {
     private const val HISTORY = "history"
     private const val PRACTICUM_EXAMPLE_PREFERENCES = "playlist_maker"
     private lateinit var sp: SharedPreferences
-
 
     fun init(context: Context) {
         sp = context.getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)

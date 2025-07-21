@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search
+package com.example.playlistmaker.presentation.search
 
 import android.content.Intent
 import android.os.Handler
@@ -9,9 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.models.Track
-import com.example.playlistmaker.track.TrackActivity
+import com.example.playlistmaker.domain.interactor.SearchHistoryInteractor
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.track.TrackActivity
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -28,6 +30,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var trackName: TextView = itemView.findViewById(R.id.trackName)
     private var time: TextView = itemView.findViewById(R.id.time)
     private var trackLabel: ImageView = itemView.findViewById(R.id.trackLabel)
+    private val historyInteractor: SearchHistoryInteractor =
+        Creator.provideSearchHistoryInteractor()
 
 
     fun bind(model: Track) {
@@ -46,14 +50,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(trackLabel)
 
         itemView.setOnClickListener {
-            val current = isClickAllowed
-
             if (isClickAllowed) {
                 isClickAllowed = false
                 handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
             }
 
-            SearchManager.addTrackToHistory(model)
+            historyInteractor.addTrackToHistory(model)
             val newModel = model.copy(
                 artworkUrl100 = model.artworkUrl100.replaceAfterLast(
                     '/',

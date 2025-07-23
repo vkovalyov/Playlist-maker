@@ -15,12 +15,8 @@ sealed interface SearchMusicState {
         val tracks: List<Track>
     ) : SearchMusicState
 
-    data class Error(
-        val message: String
-    ) : SearchMusicState
+    data object Error : SearchMusicState
 
-    data class Empty(
-        val message: String
-    ) : SearchMusicState
+    data object Empty : SearchMusicState
 
 }

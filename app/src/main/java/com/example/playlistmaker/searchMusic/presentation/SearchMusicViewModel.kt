@@ -20,6 +20,14 @@ class SearchMusicViewModel() : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
 
+    fun search(changedText: String) {
+        if (latestSearchText == changedText) {
+            return
+        }
+        searchRequest(changedText)
+
+    }
+
     fun searchDebounce(changedText: String) {
         if (latestSearchText == changedText) {
             return
@@ -52,7 +60,7 @@ class SearchMusicViewModel() : ViewModel() {
                         }
                     })
             } catch (_: Exception) {
-                renderState(SearchMusicState.Error(message = ""))
+                renderState(SearchMusicState.Error)
             }
         } else {
             updateHistory()
@@ -81,13 +89,13 @@ class SearchMusicViewModel() : ViewModel() {
     }
 
     fun clearHistory() {
+        System.out.println("clearHistory")
         historyInteractor.clearHistory()
+        updateHistory()
     }
-
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private const val SEARCH_TEXT = "search_text"
         private const val MUSIC_TRACK = "musicTrack"
 
 //        fun getFactory(historyInteractor: SearchHistoryInteractor): ViewModelProvider.Factory =
@@ -104,6 +112,4 @@ class SearchMusicViewModel() : ViewModel() {
 //            }
 //        }
     }
-
-
 }

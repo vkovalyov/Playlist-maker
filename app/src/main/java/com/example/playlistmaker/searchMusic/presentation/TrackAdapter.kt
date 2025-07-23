@@ -1,28 +1,26 @@
 package com.example.playlistmaker.searchMusic.presentation
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.R
 import com.example.playlistmaker.searchMusic.domain.models.Track
 
 class TrackAdapter(
-    private var tracks: List<Track>
+    private val onItemClick: (Track) -> Unit
 ) : RecyclerView.Adapter<TrackViewHolder>() {
-
+    private var tracks = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track, parent, false)
-        return TrackViewHolder(view)
+        return TrackViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+        holder.itemView.setOnClickListener { onItemClick(tracks[position]) }
     }
 
     override fun getItemCount() = tracks.size
 
     fun updateData(tracks: List<Track>) {
-        this.tracks = tracks
+        this.tracks = tracks as ArrayList<Track>
         notifyDataSetChanged()
     }
 }

@@ -6,19 +6,21 @@ import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.search.SearchActivity
-import com.example.playlistmaker.sharedPreferences.SharedPreferencesUtil
-
+import com.example.playlistmaker.presentation.search.SearchActivity
+import com.example.playlistmaker.cache.SharedPreferencesUtil
+import com.example.playlistmaker.domain.interactor.ThemeInteractor
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private val themeInteractor : ThemeInteractor = Creator.provideThemeInteractor()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SharedPreferencesUtil.init(context = applicationContext)
-        setAppTheme(SharedPreferencesUtil.getAppTheme())
+        themeInteractor.initAppTheme()
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -27,7 +29,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             insets
         }
 
-
         val btnSearch = findViewById<Button>(R.id.btn_search)
         val btnMedia = findViewById<Button>(R.id.btn_media)
         val btnSetting = findViewById<Button>(R.id.btn_setting)
@@ -35,14 +36,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnSearch.setOnClickListener(this@MainActivity)
         btnMedia.setOnClickListener(this@MainActivity)
         btnSetting.setOnClickListener(this@MainActivity)
-    }
-
-    private fun setAppTheme(isDarkModeOn: Boolean) {
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
     }
 
     override fun onClick(v: View?) {

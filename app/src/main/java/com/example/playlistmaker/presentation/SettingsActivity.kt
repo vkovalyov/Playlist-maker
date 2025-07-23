@@ -13,10 +13,12 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.sharedPreferences.SharedPreferencesUtil
+import com.example.playlistmaker.domain.interactor.ThemeInteractor
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener {
+    private val themeInteractor: ThemeInteractor = Creator.provideThemeInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,17 +48,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         switch.setChecked(isDarkThemeEnabled());
 
         switch.setOnCheckedChangeListener { _, isChecked ->
-            setAppTheme(isChecked)
-        }
-    }
-
-    private fun setAppTheme(isDarkModeOn: Boolean) {
-        SharedPreferencesUtil.setAppTheme(isDarkModeOn)
-
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            themeInteractor.setAppTheme(isChecked)
         }
     }
 
@@ -72,7 +64,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         val nightMode = AppCompatDelegate.getDefaultNightMode()
         return nightMode == AppCompatDelegate.MODE_NIGHT_YES
     }
-
 
     override fun onClick(v: View?) {
         when (v?.id) {

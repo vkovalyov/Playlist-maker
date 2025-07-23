@@ -1,4 +1,4 @@
-package com.example.playlistmaker.track
+package com.example.playlistmaker.presentation.track
 
 object MediaPlayerState{
     const val STATE_DEFAULT = 0

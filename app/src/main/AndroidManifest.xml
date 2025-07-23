@@ -15,13 +15,13 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31" >
         <activity
-            android:name=".track.TrackActivity"
+            android:name=".presentation.track.TrackActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".search.SearchActivity"
+            android:name=".presentation.search.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.SettingsActivity"

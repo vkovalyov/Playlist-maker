@@ -9,7 +9,7 @@ class ThemeInteractorImpl(private val repository: ThemeRepository) : ThemeIntera
     }
 
     override fun getAppTheme(): Boolean {
-        return repository.getAppTheme()
+        return repository.getAppTheme() ?: false
     }
 
     override fun setAppTheme(nightMode: Boolean) {

@@ -13,8 +13,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
+import com.example.playlistmaker.track.TrackViewModel
 import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
 
@@ -59,7 +62,14 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel = SearchMusicViewModel()
+        viewModel = ViewModelProvider(
+            this,
+            SearchMusicViewModel.getFactory(
+                Creator.provideMusicInteractor(),
+                Creator.provideSearchHistoryInteractor(this)
+            )
+        )[SearchMusicViewModel::class.java]
+
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -1,43 +1,22 @@
 package com.example.playlistmaker.searchMusic.data.repository
 
-import com.example.playlistmaker.core.cache.SharedPreferencesUtil
+import com.example.playlistmaker.core.data.cache.StorageClient
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.searchMusic.domain.repository.SearchHistoryRepository
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 private const val MAX_HISTORY_SIZE = 10
 
-class SearchHistoryRepositoryImpl() : SearchHistoryRepository {
-    private val gson = Gson()
+class SearchHistoryRepositoryImpl(private val storage: StorageClient<ArrayList<Track>>) :
+    SearchHistoryRepository {
 
     override fun getHistory(): List<Track> {
-        val historyString = SharedPreferencesUtil.getHistory()
-        val tracks: MutableList<Track>
-
-        if (historyString.isNullOrEmpty()) {
-            tracks = mutableListOf()
-        } else {
-            val type = object : TypeToken<List<Track>>() {}.type
-
-            tracks = gson.fromJson(historyString, type)
-        }
+        val tracks = storage.getData() ?: arrayListOf()
         return tracks
     }
 
-    override fun addTrackToHistory(track: Track): List<Track> {
-        val historyString = SharedPreferencesUtil.getHistory()
+    override fun saveToHistory(track: Track): List<Track> {
 
-        val tracks: MutableList<Track>
-
-        if (historyString.isNullOrEmpty()) {
-            tracks = mutableListOf()
-        } else {
-            val type = object : TypeToken<List<Track>>() {}.type
-
-            tracks = gson.fromJson(historyString, type)
-        }
-
+        val tracks = storage.getData() ?: arrayListOf()
 
         tracks.remove(track)
         tracks.add(0, track)
@@ -46,14 +25,13 @@ class SearchHistoryRepositoryImpl() : SearchHistoryRepository {
             tracks.removeAt(tracks.size - 1)
         }
 
-        val json = gson.toJson(tracks)
-        SharedPreferencesUtil.setHistory(json)
+        storage.storeData(tracks)
 
         return getHistory()
     }
 
     override fun clearHistory() {
-        SharedPreferencesUtil.clearHistory()
+        storage.clear()
     }
 
 }

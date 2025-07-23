@@ -1,6 +1,5 @@
-package com.example.playlistmaker.core.network
+package com.example.playlistmaker.core.data.network
 
-import com.example.playlistmaker.core.NetworkClient
 import com.example.playlistmaker.searchMusic.data.dto.MusicSearchRequest
 import com.example.playlistmaker.searchMusic.data.dto.Response
 import retrofit2.Retrofit

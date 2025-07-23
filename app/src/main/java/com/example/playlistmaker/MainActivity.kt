@@ -9,17 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.searchMusic.presentation.SearchActivity
-import com.example.playlistmaker.core.cache.SharedPreferencesUtil
 import com.example.playlistmaker.settings.domain.interactor.ThemeInteractor
 import com.example.playlistmaker.settings.presentation.SettingsActivity
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
-    private val themeInteractor : ThemeInteractor = Creator.provideThemeInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SharedPreferencesUtil.init(context = applicationContext)
-        themeInteractor.initAppTheme()
+
+       Creator.provideThemeInteractor(context = this).initAppTheme()
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

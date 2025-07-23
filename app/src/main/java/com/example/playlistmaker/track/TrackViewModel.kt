@@ -12,8 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
-class PlayerViewModel(private val url: String) : ViewModel() {
+class TrackViewModel(private val url: String) : ViewModel() {
 
     companion object {
         const val STATE_DEFAULT = 0
@@ -23,7 +22,7 @@ class PlayerViewModel(private val url: String) : ViewModel() {
 
         fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                PlayerViewModel(trackUrl)
+                TrackViewModel(trackUrl)
             }
         }
     }

@@ -1,26 +1,18 @@
 package com.example.playlistmaker.track
 
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.MenuItem
 import android.view.View.GONE
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.databinding.ActivityTrackBinding
-import com.example.playlistmaker.databinding.TrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -29,7 +21,7 @@ import java.time.ZoneId
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var viewModel: TrackViewModel
     private lateinit var binding: ActivityTrackBinding
     private val gson = Gson()
 
@@ -53,7 +45,12 @@ class TrackActivity : AppCompatActivity() {
         val track = gson.fromJson(json, Track::class.java)
 
         Glide.with(binding.trackLogo)
-            .load(track.artworkUrl100)
+            .load(
+                track.artworkUrl100.replaceAfterLast(
+                    '/',
+                    "512x512bb.jpg"
+                )
+            )
             .centerInside()
             .centerCrop()
             .placeholder(R.drawable.placeholder)
@@ -100,11 +97,11 @@ class TrackActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getFactory(track.previewUrl.toString())
-        )[PlayerViewModel::class.java]
+            TrackViewModel.getFactory(track.previewUrl.toString())
+        )[TrackViewModel::class.java]
 
         viewModel.observePlayerState().observe(this) {
-            changeButtonText(it == PlayerViewModel.STATE_PLAYING)
+            changeButtonText(it == TrackViewModel.STATE_PLAYING)
         }
 
         viewModel.observeProgressTime().observe(this) {
@@ -117,9 +114,9 @@ class TrackActivity : AppCompatActivity() {
     }
 
     private fun changeButtonText(isPlaying: Boolean) {
-        if(isPlaying){
+        if (isPlaying) {
             binding.play.setImageResource(R.drawable.pause)
-        }else{
+        } else {
             binding.play.setImageResource(R.drawable.play)
         }
     }

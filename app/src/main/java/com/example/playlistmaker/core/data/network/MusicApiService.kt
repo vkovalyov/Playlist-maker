@@ -1,4 +1,4 @@
-package com.example.playlistmaker.core.network
+package com.example.playlistmaker.core.data.network
 
 import com.example.playlistmaker.searchMusic.data.dto.TrackSearchResponse
 import retrofit2.Call

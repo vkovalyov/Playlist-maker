@@ -1,6 +1,6 @@
 package com.example.playlistmaker.searchMusic.data.repository
 
-import com.example.playlistmaker.core.NetworkClient
+import com.example.playlistmaker.core.data.network.NetworkClient
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.searchMusic.domain.repository.MusicRepository
 import com.example.playlistmaker.searchMusic.data.dto.MusicSearchRequest

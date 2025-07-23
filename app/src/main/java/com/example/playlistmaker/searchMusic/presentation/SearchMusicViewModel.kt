@@ -5,13 +5,17 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.Creator
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractor
+import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractor
 import com.example.playlistmaker.searchMusic.domain.models.Track
 
-class SearchMusicViewModel() : ViewModel() {
-    private val musicInteractor = Creator.provideMusicInteractor()
-    private val historyInteractor = Creator.provideSearchHistoryInteractor()
+class SearchMusicViewModel(
+    private val musicInteractor: MusicInteractor,
+    private val historyInteractor: SearchHistoryInteractor
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchMusicState>()
     fun observeState(): LiveData<SearchMusicState> = stateLiveData
@@ -81,7 +85,7 @@ class SearchMusicViewModel() : ViewModel() {
     }
 
     fun addHistory(track: Track) {
-        historyInteractor.addTrackToHistory(track)
+        historyInteractor.saveToHistory(track)
     }
 
     fun updateHistory() {
@@ -89,7 +93,6 @@ class SearchMusicViewModel() : ViewModel() {
     }
 
     fun clearHistory() {
-        System.out.println("clearHistory")
         historyInteractor.clearHistory()
         updateHistory()
     }
@@ -98,18 +101,15 @@ class SearchMusicViewModel() : ViewModel() {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val MUSIC_TRACK = "musicTrack"
 
-//        fun getFactory(historyInteractor: SearchHistoryInteractor): ViewModelProvider.Factory =
-//            viewModelFactory {
-//                initializer {
-//                    SearchMusicViewModel(historyInteractor)
-//                }
-//            }
-//
-//        fun getFactory(value: Int): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val app = (this[APPLICATION_KEY] as MoviesApplication)
-//                MoviesViewModel(app)
-//            }
-//        }
+
+        fun getFactory(
+            musicInteractor: MusicInteractor,
+            historyInteractor: SearchHistoryInteractor
+        ): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    SearchMusicViewModel(musicInteractor, historyInteractor)
+                }
+            }
     }
 }

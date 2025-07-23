@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:theme="@style/MainActivity"
 
-    tools:context=".presentation.MainActivity">
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"

@@ -1,18 +1,18 @@
 package com.example.playlistmaker
 
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.repository.MusicRepositoryImpl
-import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
-import com.example.playlistmaker.data.repository.ThemeRepositoryImpl
-import com.example.playlistmaker.domain.interactor.MusicInteractor
-import com.example.playlistmaker.domain.interactor.MusicInteractorImpl
-import com.example.playlistmaker.domain.interactor.SearchHistoryInteractor
-import com.example.playlistmaker.domain.interactor.SearchHistoryInteractorImpl
-import com.example.playlistmaker.domain.interactor.ThemeInteractor
-import com.example.playlistmaker.domain.interactor.ThemeInteractorImpl
-import com.example.playlistmaker.domain.repository.MusicRepository
-import com.example.playlistmaker.domain.repository.SearchHistoryRepository
-import com.example.playlistmaker.domain.repository.ThemeRepository
+import com.example.playlistmaker.core.network.RetrofitNetworkClient
+import com.example.playlistmaker.searchMusic.data.repository.MusicRepositoryImpl
+import com.example.playlistmaker.searchMusic.data.repository.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.settings.data.repository.ThemeRepositoryImpl
+import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractor
+import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractorImpl
+import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractor
+import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractorImpl
+import com.example.playlistmaker.settings.domain.interactor.ThemeInteractor
+import com.example.playlistmaker.settings.domain.interactor.ThemeInteractorImpl
+import com.example.playlistmaker.searchMusic.domain.repository.MusicRepository
+import com.example.playlistmaker.searchMusic.domain.repository.SearchHistoryRepository
+import com.example.playlistmaker.settings.domain.repository.ThemeRepository
 
 object Creator {
     private fun getMusicRepository(): MusicRepository {

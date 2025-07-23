@@ -11,7 +11,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="top"
     android:orientation="vertical"
-    tools:context=".presentation.search.SearchActivity">
+    tools:context=".searchMusic.presentation.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

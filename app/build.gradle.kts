@@ -53,5 +53,6 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.retrofit)
     implementation(libs.converterGson)
+    implementation(libs.koin)
 
 }

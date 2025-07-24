@@ -13,19 +13,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val TRACK = "track"
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
-    private var viewModel: SearchMusicViewModel? = null
+    private val viewModel: SearchMusicViewModel by viewModel()
 
     private var historyAdapter = TrackAdapter {
         onClickTrack(it)
@@ -63,14 +61,6 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchMusicViewModel.getFactory(
-                Creator.provideMusicInteractor(),
-                Creator.provideSearchHistoryInteractor(this)
-            )
-        )[SearchMusicViewModel::class.java]
 
 
         setSupportActionBar(binding.toolbar)

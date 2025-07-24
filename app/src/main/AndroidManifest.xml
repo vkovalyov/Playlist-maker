@@ -18,7 +18,7 @@
             android:name=".track.TrackActivity"
             android:exported="false" />
         <activity
-            android:name=".MediaActivity"
+            android:name=".media.MediaActivity"
             android:exported="false" />
         <activity
             android:name=".searchMusic.presentation.SearchActivity"
@@ -27,7 +27,7 @@
             android:name=".settings.presentation.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

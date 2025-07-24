@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.media.MediaActivity
+import com.example.playlistmaker.R
 import com.example.playlistmaker.searchMusic.presentation.SearchActivity
-import com.example.playlistmaker.settings.domain.interactor.ThemeInteractor
 import com.example.playlistmaker.settings.presentation.SettingsActivity
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {

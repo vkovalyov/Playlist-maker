@@ -8,6 +8,7 @@ import java.lang.reflect.Type
 private const val PRACTICUM_EXAMPLE_PREFERENCES = "playlist_maker"
 
 class PrefsStorageClient<T>(
+    private val gson: Gson,
     private val context: Context,
     private val dataKey: String,
     private val type: Type
@@ -15,8 +16,6 @@ class PrefsStorageClient<T>(
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, Context.MODE_PRIVATE)
-
-    private val gson = Gson()
 
     override fun storeData(data: T) {
         prefs.edit().putString(dataKey, gson.toJson(data, type)).apply()

@@ -17,9 +17,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
-import com.example.playlistmaker.track.TrackViewModel
 import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
+
+
+const val TRACK = "track"
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
@@ -40,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
         val intent = Intent(this, TrackActivity::class.java)
         val gson = Gson()
         val json = gson.toJson(track)
-        intent.putExtra("track", json)
+        intent.putExtra(TRACK, json)
         startActivity(intent)
     }
 

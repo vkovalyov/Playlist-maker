@@ -16,7 +16,11 @@ import com.example.playlistmaker.settings.domain.interactor.ThemeInteractorImpl
 import com.example.playlistmaker.searchMusic.domain.repository.MusicRepository
 import com.example.playlistmaker.searchMusic.domain.repository.SearchHistoryRepository
 import com.example.playlistmaker.settings.domain.repository.ThemeRepository
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
+private const val APP_THEME = "app_theme"
+private const val HISTORY = "history"
 
 object Creator {
     private fun getMusicRepository(): MusicRepository {
@@ -31,8 +35,9 @@ object Creator {
     private fun getThemeRepository(context: Context): ThemeRepository {
         return ThemeRepositoryImpl(
             PrefsStorageClient(
+                Gson(),
                 context,
-                "app_theme",
+                APP_THEME,
                 object : TypeToken<Boolean>() {}.type
             )
         )
@@ -46,10 +51,12 @@ object Creator {
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(
             PrefsStorageClient(
+                Gson(),
                 context,
-                "history",
-                object : TypeToken<ArrayList<Track>>() {}.type
-            )
+                HISTORY,
+                object : TypeToken<ArrayList<Track>>() {}.type,
+
+                )
         )
     }
 

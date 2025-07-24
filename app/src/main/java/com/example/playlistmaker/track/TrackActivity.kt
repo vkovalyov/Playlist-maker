@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
+import com.example.playlistmaker.searchMusic.presentation.TRACK
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -41,7 +42,7 @@ class TrackActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        val json = intent.getStringExtra("track")
+        val json = intent.getStringExtra(TRACK)
         val track = gson.fromJson(json, Track::class.java)
 
         Glide.with(binding.trackLogo)

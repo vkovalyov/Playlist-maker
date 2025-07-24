@@ -8,27 +8,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private var viewModel: SettingsViewModel? = null
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         enableEdgeToEdge()
-
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getFactory(
-                Creator.provideThemeInteractor(context = this),
-            )
-        )[SettingsViewModel::class.java]
-
 
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.setting)) { v, insets ->
@@ -62,14 +53,14 @@ class SettingsActivity : AppCompatActivity() {
         }
 
 
-        viewModel?.observeState()?.observe(this) {
+        viewModel.observeState().observe(this) {
             binding.switch1.setChecked(it)
         }
 
-        viewModel?.getAppTheme()
+        viewModel.getAppTheme()
 
         binding.switch1.setOnCheckedChangeListener { _, isChecked ->
-            viewModel?.setAppTheme(isChecked)
+            viewModel.setAppTheme(isChecked)
         }
     }
 

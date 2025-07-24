@@ -100,16 +100,5 @@ class SearchMusicViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val MUSIC_TRACK = "musicTrack"
-
-
-        fun getFactory(
-            musicInteractor: MusicInteractor,
-            historyInteractor: SearchHistoryInteractor
-        ): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    SearchMusicViewModel(musicInteractor, historyInteractor)
-                }
-            }
     }
 }

@@ -15,6 +15,7 @@ converterGsonVersion = "2.9.0"
 navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 androidx-lifecycle = "2.5.1"
+koinVersion= "3.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,6 +23,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersio
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
 retrofit = {module ="com.squareup.retrofit2:retrofit", version.ref = "retrofitVersoin"}
 converterGson = {module ="com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion"}
+koin = {module ="io.insert-koin:koin-android" , version.ref = "koinVersion"}
 
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }

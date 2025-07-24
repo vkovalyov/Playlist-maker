@@ -8,18 +8,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.media.MediaActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.searchMusic.presentation.SearchActivity
+import com.example.playlistmaker.settings.domain.interactor.ThemeInteractor
 import com.example.playlistmaker.settings.presentation.SettingsActivity
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       Creator.provideThemeInteractor(context = this).initAppTheme()
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -27,6 +29,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val viewModel: MainViewModel by viewModel()
+        viewModel.initTheme()
 
         val btnSearch = findViewById<Button>(R.id.btn_search)
         val btnMedia = findViewById<Button>(R.id.btn_media)

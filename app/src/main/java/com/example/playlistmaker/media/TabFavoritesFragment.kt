@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.TabFavoritesBinding
+import com.example.playlistmaker.media.vm.FavoritesViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class TabFavoritesFragment : Fragment() {
+    private val viewModel: FavoritesViewModel by viewModel()
 
     companion object {
         fun newInstance() = TabFavoritesFragment().apply {}
-        }
+    }
 
     private lateinit var binding: TabFavoritesBinding
 

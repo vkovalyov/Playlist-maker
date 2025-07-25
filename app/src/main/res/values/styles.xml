@@ -3,8 +3,6 @@
 
 
     <style name="MainActivity">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/blue</item>
     </style>
 
@@ -152,5 +150,25 @@
     <style name="PauseButton">
         <item name="android:src">@drawable/pause</item>
     </style>
+
+    <style name="CustomTabText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="MediaActivity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TabLayoutStyle">
+        <item name="android:background">@color/white</item>
+        <item name="tabTextColor">@color/black</item>
+        <item name="tabIndicatorColor">@color/black</item>
+
+    </style>
+
 
 </resources>

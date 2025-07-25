@@ -41,6 +41,13 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="favorites"> Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
+
+    <string name="your_media_empty">Ваша медиатека пуста</string>
+    <string name="not_created_playlists">Вы не создали \n ни одного плейлиста</string>
+    <string name="new_playlists"> Новый плейлист</string>
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

@@ -3,33 +3,30 @@ package com.example.playlistmaker.settings.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsBinding
+class SettingsFragment : Fragment() {
+    private lateinit var binding: FragmentSettingsBinding
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
 
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.setting)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.share.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
@@ -38,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
             shareIntent.putExtra(Intent.EXTRA_TEXT, link)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_link)))
         }
+
         binding.support.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.setType("text/plain")
@@ -46,14 +44,14 @@ class SettingsActivity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.body_title)) // Тело письма
             startActivity(Intent.createChooser(intent, ""))
         }
+
         binding.agreement.setOnClickListener {
             val url = getString(R.string.offer)
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
         }
 
-
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             binding.switch1.setChecked(it)
         }
 
@@ -62,13 +60,5 @@ class SettingsActivity : AppCompatActivity() {
         binding.switch1.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setAppTheme(isChecked)
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

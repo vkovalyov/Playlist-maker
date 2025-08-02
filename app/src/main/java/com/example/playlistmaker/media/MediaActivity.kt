@@ -1,34 +1,23 @@
 package com.example.playlistmaker.media
 
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityMediaBinding
+import com.example.playlistmaker.databinding.FragmentMediaBinding
+
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MediaActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMediaBinding
+class MediaActivity : Fragment() {
+    private lateinit var binding: FragmentMediaBinding
     private lateinit var tabMediator: TabLayoutMediator
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityMediaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.media)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        binding.viewPager.adapter = NumbersViewPagerAdapter(supportFragmentManager, lifecycle)
+        binding.viewPager.adapter = NumbersViewPagerAdapter(childFragmentManager, lifecycle)
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
@@ -39,11 +28,12 @@ class MediaActivity : AppCompatActivity() {
         tabMediator.attach()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMediaBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
 }

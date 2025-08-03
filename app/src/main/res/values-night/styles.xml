@@ -167,4 +167,13 @@
         <item name="tabIndicatorColor">@color/white</item>
 
     </style>
+
+    <style name="BottomNavigationNoRipple" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:textSize">@dimen/regular_s</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="itemBackground">@color/black</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color</item>
+        <item name="itemTextColor">@color/bottom_nav_text_color</item>
+        <item name="itemTextAppearanceActiveBoldEnabled">false</item>
+    </style>
 </resources>

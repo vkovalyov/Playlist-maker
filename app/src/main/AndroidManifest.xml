@@ -18,17 +18,10 @@
         <activity
             android:name=".track.TrackActivity"
             android:exported="false" />
-        <activity
-            android:name=".media.MediaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".searchMusic.presentation.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".settings.presentation.SettingsActivity"
-            android:exported="false" />
+
         <activity
             android:name=".main.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

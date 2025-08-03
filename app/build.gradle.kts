@@ -54,5 +54,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converterGson)
     implementation(libs.koin)
+    implementation (libs.androidx.navigation.fragment.ktx.v253)
+    implementation (libs.androidx.navigation.ui.ktx.v253)
+    implementation (libs.androidx.fragment.ktx)
 
 }

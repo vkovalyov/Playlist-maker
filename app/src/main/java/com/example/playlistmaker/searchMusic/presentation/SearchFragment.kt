@@ -1,19 +1,18 @@
 package com.example.playlistmaker.searchMusic.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
@@ -21,8 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val TRACK = "track"
 
-class SearchActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchMusicViewModel by viewModel()
 
     private var historyAdapter = TrackAdapter {
@@ -36,39 +35,28 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun onClickTrack(track: Track) {
-        viewModel?.addHistory(track)
-        val intent = Intent(this, TrackActivity::class.java)
+        viewModel.addHistory(track)
+        val intent = Intent(requireContext(), TrackActivity::class.java)
         val gson = Gson()
         val json = gson.toJson(track)
         intent.putExtra(TRACK, json)
         startActivity(intent)
     }
 
-    override fun onResume() {
-        binding.searchInput.requestFocus()
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT)
-        super.onResume()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
-
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.tracksHistory.historyList.adapter = historyAdapter
 
-        viewModel?.updateHistory()
+        viewModel.updateHistory()
 
         binding.trackList.adapter = adapter
 
@@ -91,14 +79,14 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchError.refreshButton.setOnClickListener { search() }
 
-        binding.tracksHistory.btnClearHistory.setOnClickListener { viewModel?.clearHistory() }
+        binding.tracksHistory.btnClearHistory.setOnClickListener { viewModel.clearHistory() }
         binding.clearIcon.setOnClickListener {
             binding.searchInput.text.clear()
             binding.clearIcon.visibility = View.GONE
             binding.trackList.visibility = View.GONE
             clearFocus(binding.searchInput)
             binding.tracksHistory.historyList.visibility = View.VISIBLE
-            viewModel?.updateHistory()
+            viewModel.updateHistory()
         }
 
         binding.searchInput.setOnEditorActionListener { _, actionId, _ ->
@@ -111,13 +99,13 @@ class SearchActivity : AppCompatActivity() {
         binding.searchInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.searchInput.text.isEmpty()) {
                 binding.tracksHistory.historyList.visibility = View.VISIBLE
-                viewModel?.updateHistory()
+                viewModel.updateHistory()
             } else {
                 binding.tracksHistory.historyList.visibility = View.GONE
             }
         }
 
-        viewModel?.observeState()?.observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is SearchMusicState.ContentHistory -> {
                     binding.progressBar.visibility = View.GONE
@@ -163,39 +151,30 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun search() {
-        viewModel?.search(
+        viewModel.search(
             changedText = (binding.searchInput.text ?: "").toString()
         )
     }
 
     private fun searchDebounce() {
-        viewModel?.searchDebounce(
+        viewModel.searchDebounce(
             changedText = (binding.searchInput.text ?: "").toString()
         )
     }
 
     private fun clearFocus(inputEditText: EditText) {
         inputEditText.clearFocus()
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(inputEditText.windowToken, 0)
-        viewModel?.updateHistory()
+        viewModel.updateHistory()
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         textWatcher?.let { binding.searchInput.removeTextChangedListener(it) }
     }
 }

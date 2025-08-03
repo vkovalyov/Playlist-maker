@@ -9,6 +9,6 @@
     <color name="blue_light"> #9FBBF3</color>
     <color name="black_track"> #000000</color>
 
-    <color name="bottom_nav_unchecked">@color/black</color>
+    <color name="bottom_nav_unchecked">@color/white</color>
     <color name="bottom_nav_checked">@color/blue</color>
 </resources>

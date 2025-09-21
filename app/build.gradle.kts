@@ -57,5 +57,6 @@ dependencies {
     implementation (libs.androidx.navigation.fragment.ktx.v253)
     implementation (libs.androidx.navigation.ui.ktx.v253)
     implementation (libs.androidx.fragment.ktx)
+    implementation(libs.kotlinx.coroutines.android)
 
 }

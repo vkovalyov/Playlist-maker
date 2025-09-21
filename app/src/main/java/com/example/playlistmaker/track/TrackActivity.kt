@@ -1,10 +1,13 @@
 package com.example.playlistmaker.track
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,8 +18,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.searchMusic.presentation.TRACK
-
-
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -24,11 +25,12 @@ import java.time.ZoneId
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
-    private lateinit var viewModel: TrackViewModel
+    private lateinit var trackViewModel: TrackViewModel
     private lateinit var binding: ActivityTrackBinding
     private val gson = Gson()
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -97,26 +99,22 @@ class TrackActivity : AppCompatActivity() {
             binding.countryTrack.text = track.country
         }
 
-
-        viewModel = ViewModelProvider(
+        trackViewModel = ViewModelProvider(
             this,
             TrackViewModel.getFactory(track.previewUrl.toString())
         )[TrackViewModel::class.java]
 
-        viewModel.observePlayerState().observe(this) {
-            changeButtonText(it == TrackViewModel.STATE_PLAYING)
-        }
-
-        viewModel.observeProgressTime().observe(this) {
-            binding.lastDuration.text = it
+        trackViewModel.observePlayerState().observe(this) {
+            changeButton(it.isPlayButtonEnabled)
+            binding.lastDuration.text = it.progress
         }
 
         binding.play.setOnClickListener {
-            viewModel.onPlayButtonClicked()
+            trackViewModel.onPlayButtonClicked()
         }
     }
 
-    private fun changeButtonText(isPlaying: Boolean) {
+    private fun changeButton(isPlaying: Boolean) {
         if (isPlaying) {
             binding.play.setImageResource(R.drawable.pause)
         } else {
@@ -135,6 +133,6 @@ class TrackActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
+        trackViewModel.pausePlayer()
     }
 }

@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-var DELAY = 300L;
+private const val DELAY = 300L;
+
 
 class TrackViewModel(private val url: String) : ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default())

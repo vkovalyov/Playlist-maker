@@ -1,28 +1,27 @@
 package com.example.playlistmaker.searchMusic.presentation
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractor
 import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractor
 import com.example.playlistmaker.searchMusic.domain.models.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 class SearchMusicViewModel(
     private val musicInteractor: MusicInteractor,
     private val historyInteractor: SearchHistoryInteractor
 ) : ViewModel() {
-
+    private var searchJob: Job? = null
     private val stateLiveData = MutableLiveData<SearchMusicState>()
     fun observeState(): LiveData<SearchMusicState> = stateLiveData
 
     private var latestSearchText: String? = null
 
-    private val handler = Handler(Looper.getMainLooper())
 
     fun search(changedText: String) {
         if (latestSearchText == changedText) {
@@ -38,11 +37,11 @@ class SearchMusicViewModel(
         }
 
         this.latestSearchText = changedText
-        handler.removeCallbacksAndMessages(null)
-
-        val searchRunnable = Runnable { searchRequest(changedText) }
-
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchRequest(changedText)
+        }
 
     }
 
@@ -50,22 +49,18 @@ class SearchMusicViewModel(
         if (newSearchText.isNotEmpty()) {
             renderState(SearchMusicState.Loading)
 
-            try {
-                musicInteractor.searchMusic(
-                    MUSIC_TRACK,
-                    latestSearchText.toString(),
-                    object : MusicInteractor.MusicConsumer {
-                        override fun consume(foundMusic: List<Track>) {
-                            if (foundMusic.isNotEmpty()) {
-                                renderState(SearchMusicState.ContentSearchResult(foundMusic))
-                            } else {
-                                renderState(SearchMusicState.ContentSearchResult(emptyList()))
-                            }
-                        }
-                    })
-            } catch (_: Exception) {
-                renderState(SearchMusicState.Error)
+            viewModelScope.launch {
+                musicInteractor
+                    .searchMusic(MUSIC_TRACK, latestSearchText.toString())
+                    .catch {
+                        renderState(SearchMusicState.Error)
+                    }
+                    .collect { pair ->
+                        renderState(SearchMusicState.ContentSearchResult(pair))
+                    }
+
             }
+
         } else {
             updateHistory()
         }
@@ -73,11 +68,6 @@ class SearchMusicViewModel(
 
     private fun renderState(state: SearchMusicState) {
         stateLiveData.postValue(state)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        handler.removeCallbacksAndMessages(null)
     }
 
     private fun getHistorySearch(): List<Track> {

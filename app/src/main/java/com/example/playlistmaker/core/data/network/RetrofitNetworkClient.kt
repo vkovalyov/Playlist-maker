@@ -22,12 +22,8 @@ class RetrofitNetworkClient : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
         return if (dto is MusicSearchRequest) {
-            withContext(Dispatchers.IO) {
-
-                val response = musicService.searchMusic(dto.searchText, dto.type)
-                response.apply { resultCode = 200 }
-
-            }
+            val response = musicService.searchMusic(dto.searchText, dto.type)
+            response.apply { resultCode = 200 }
         } else {
             Response().apply { resultCode = 400 }
         }

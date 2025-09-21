@@ -1,6 +1,7 @@
 package com.example.playlistmaker.track
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+var DELAY = 300L;
 
 class TrackViewModel(private val url: String) : ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default())
@@ -59,10 +62,12 @@ class TrackViewModel(private val url: String) : ViewModel() {
     private fun preparePlayer() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
+
         mediaPlayer.setOnPreparedListener {
             playerStateLiveData.postValue(PlayerState.Prepared())
         }
         mediaPlayer.setOnCompletionListener {
+            timerJob?.cancel()
             playerStateLiveData.postValue(PlayerState.Prepared())
         }
     }
@@ -80,9 +85,10 @@ class TrackViewModel(private val url: String) : ViewModel() {
     }
 
     private fun startTimerUpdate() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
-                delay(300L)
+                delay(DELAY)
                 playerStateLiveData.postValue(
                     PlayerState.Playing(getCurrentPlayerPosition())
                 )

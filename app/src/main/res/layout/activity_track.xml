@@ -110,7 +110,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/play"
             app:layout_constraintEnd_toStartOf="@id/right_guideline"
             app:layout_constraintTop_toTopOf="@+id/play"
-            app:srcCompat="@drawable/favorite" />
+            app:srcCompat="@drawable/favorite_disabled" />
 
 
         <androidx.constraintlayout.widget.Barrier

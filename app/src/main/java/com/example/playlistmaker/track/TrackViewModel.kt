@@ -9,8 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
+import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -18,22 +22,19 @@ import java.util.Locale
 private const val DELAY = 300L;
 
 
-class TrackViewModel(private val url: String) : ViewModel() {
+class TrackViewModel(private val track: Track, private val interactor: FavoriteMusicInteractor) :
+    ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default())
+    private val favoriteLiveData = MutableLiveData<Boolean>(track.isFavorite)
     private var timerJob: Job? = null
 
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteLiveData
+
+    private var isFavorite: Boolean = track.isFavorite
 
     private val mediaPlayer = MediaPlayer()
 
-
-    companion object {
-        fun getFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                TrackViewModel(trackUrl)
-            }
-        }
-    }
 
     init {
         preparePlayer()
@@ -44,6 +45,24 @@ class TrackViewModel(private val url: String) : ViewModel() {
         mediaPlayer.release()
         mediaPlayer.release()
         playerStateLiveData.value = PlayerState.Default()
+    }
+
+    fun onFavoriteClicked(track: Track) {
+        isFavorite = !isFavorite
+        viewModelScope.launch {
+
+            if (!isFavorite) {
+                interactor.delete(track.id).collect {
+                    favoriteLiveData.postValue(isFavorite)
+                }
+            } else {
+                interactor.insert(track).collect {
+                    favoriteLiveData.postValue(isFavorite)
+                }
+            }
+            interactor.favoriteMusic()
+
+        }
     }
 
     fun onPlayButtonClicked() {
@@ -61,7 +80,7 @@ class TrackViewModel(private val url: String) : ViewModel() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
+        mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
 
         mediaPlayer.setOnPreparedListener {

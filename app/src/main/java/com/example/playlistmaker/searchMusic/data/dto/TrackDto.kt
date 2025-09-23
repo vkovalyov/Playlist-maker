@@ -1,6 +1,7 @@
 package com.example.playlistmaker.searchMusic.data.dto
 
 data class TrackDto(
+    val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,

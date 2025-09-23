@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,7 @@ import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val TRACK = "track"
+const val TRACK = "TRACK_KEY"
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
@@ -37,9 +38,7 @@ class SearchFragment : Fragment() {
     private fun onClickTrack(track: Track) {
         viewModel.addHistory(track)
         val intent = Intent(requireContext(), TrackActivity::class.java)
-        val gson = Gson()
-        val json = gson.toJson(track)
-        intent.putExtra(TRACK, json)
+        intent.putExtra(TRACK, track)
         startActivity(intent)
     }
 

@@ -17,6 +17,7 @@ class MusicRepositoryImpl(private val networkClient: NetworkClient) : MusicRepos
             with(response as TrackSearchResponse) {
                 val data = response.results.map {
                     Track(
+                        it.trackId,
                         it.trackName,
                         it.artistName,
                         it.trackTimeMillis,
@@ -26,6 +27,7 @@ class MusicRepositoryImpl(private val networkClient: NetworkClient) : MusicRepos
                         it.primaryGenreName,
                         it.country,
                         it.previewUrl,
+                        false
                     )
                 }
                 emit(data)

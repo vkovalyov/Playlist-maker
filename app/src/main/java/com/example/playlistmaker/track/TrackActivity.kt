@@ -17,23 +17,31 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
+import com.example.playlistmaker.searchMusic.presentation.SearchMusicViewModel
 import com.example.playlistmaker.searchMusic.presentation.TRACK
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
-    private lateinit var trackViewModel: TrackViewModel
-    private lateinit var binding: ActivityTrackBinding
-    private val gson = Gson()
+    private val trackViewModel: TrackViewModel by viewModel {
+        parametersOf(track)
+    }
 
+    private val track: Track by lazy {
+        intent.getParcelableExtra(TRACK)!!
+    }
+    private lateinit var binding: ActivityTrackBinding
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         binding = ActivityTrackBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -46,8 +54,6 @@ class TrackActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        val json = intent.getStringExtra(TRACK)
-        val track = gson.fromJson(json, Track::class.java)
 
         Glide.with(binding.trackLogo)
             .load(
@@ -64,6 +70,7 @@ class TrackActivity : AppCompatActivity() {
             .into(binding.trackLogo)
 
 
+
         binding.trackName.text = track.trackName
         binding.trackGroup.text = track.artistName
 
@@ -72,12 +79,14 @@ class TrackActivity : AppCompatActivity() {
 
         binding.lastDuration.text = "00:00"
 
+        changeFavoriteButton(track.isFavorite)
         if (track.collectionName == null) {
             binding.albumGroup.visibility = GONE
         } else {
             val album = findViewById<TextView>(R.id.album_track)
             binding.albumTrack.text = track.collectionName
         }
+
 
         if (track.releaseDate == null) {
             binding.yearGroup.visibility = GONE
@@ -86,6 +95,7 @@ class TrackActivity : AppCompatActivity() {
             val zonedDateTime = instant.atZone(ZoneId.of("UTC"))
             binding.yearTrack.text = zonedDateTime.year.toString()
         }
+
 
         if (track.primaryGenreName == null) {
             binding.genreGroup.visibility = GONE
@@ -99,18 +109,32 @@ class TrackActivity : AppCompatActivity() {
             binding.countryTrack.text = track.country
         }
 
-        trackViewModel = ViewModelProvider(
-            this,
-            TrackViewModel.getFactory(track.previewUrl.toString())
-        )[TrackViewModel::class.java]
+        trackViewModel.observeFavoriteState().observe(this) {
+            changeFavoriteButton(it)
+        }
+
+
 
         trackViewModel.observePlayerState().observe(this) {
             changeButton(it.isPlayButtonEnabled)
             binding.lastDuration.text = it.progress
         }
 
+        binding.favorite.setOnClickListener {
+
+            trackViewModel.onFavoriteClicked(track)
+        }
+
         binding.play.setOnClickListener {
             trackViewModel.onPlayButtonClicked()
+        }
+    }
+
+    private fun changeFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favorite.setImageResource(R.drawable.favorite_pressed)
+        } else {
+            binding.favorite.setImageResource(R.drawable.favorite_disabled)
         }
     }
 

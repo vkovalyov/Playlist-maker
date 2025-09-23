@@ -16,12 +16,12 @@ import org.koin.dsl.module
 
 val searchModule = module {
     single<MusicRepository> { MusicRepositoryImpl(get()) }
-    single<SearchHistoryRepository> { SearchHistoryRepositoryImpl( get(named(HISTORY))) }
+    single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get(named(HISTORY))) }
     single<MusicInteractor> { MusicInteractorImpl(get()) }
     single<SearchHistoryInteractor> { SearchHistoryInteractorImpl(get()) }
 
     viewModel {
-        SearchMusicViewModel(get(), get())
+        SearchMusicViewModel(get(), get(), get())
     }
 }
 

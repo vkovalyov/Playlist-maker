@@ -1,20 +1,26 @@
 package com.example.playlistmaker.searchMusic.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
 import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractor
 import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractor
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SearchMusicViewModel(
     private val musicInteractor: MusicInteractor,
-    private val historyInteractor: SearchHistoryInteractor
+    private val historyInteractor: SearchHistoryInteractor,
+    private val interactor: FavoriteMusicInteractor
 ) : ViewModel() {
     private var searchJob: Job? = null
     private val stateLiveData = MutableLiveData<SearchMusicState>()
@@ -45,19 +51,37 @@ class SearchMusicViewModel(
 
     }
 
+
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(SearchMusicState.Loading)
 
             viewModelScope.launch {
-                musicInteractor
-                    .searchMusic(MUSIC_TRACK, latestSearchText.toString())
-                    .catch {
-                        renderState(SearchMusicState.Error)
+
+
+                interactor.favoriteMusic()
+                    .collect { tracks ->
+                        val favoritesId: List<Int> = tracks.map { it.id }
+                        musicInteractor
+                            .searchMusic(MUSIC_TRACK, latestSearchText.toString())
+                            .catch {
+                                renderState(SearchMusicState.Error)
+                            }
+                            .map {
+                                it.map { entity ->
+                                    if (favoritesId.isNotEmpty()) {
+                                        if (favoritesId.contains(entity.id)) {
+                                            entity.isFavorite = true
+                                        }
+                                    }
+                                    entity
+                                }
+                            }
+                            .collect { pair ->
+                                renderState(SearchMusicState.ContentSearchResult(pair))
+                            }
                     }
-                    .collect { pair ->
-                        renderState(SearchMusicState.ContentSearchResult(pair))
-                    }
+
 
             }
 
@@ -79,7 +103,27 @@ class SearchMusicViewModel(
     }
 
     fun updateHistory() {
-        renderState(SearchMusicState.ContentHistory(getHistorySearch()))
+        var favoritesId: List<Int> = mutableListOf()
+
+        viewModelScope.launch {
+            interactor.favoriteMusic()
+                .stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5000),
+                    initialValue = emptyList()
+                )
+                .collect { tracks ->
+                    favoritesId = tracks.map { it.id }
+                    val historyList = getHistorySearch().map { entity ->
+                        entity.isFavorite = favoritesId.contains(entity.id)
+                        entity
+
+                    }
+
+                    renderState(SearchMusicState.ContentHistory(historyList))
+                }
+        }
+
     }
 
     fun clearHistory() {

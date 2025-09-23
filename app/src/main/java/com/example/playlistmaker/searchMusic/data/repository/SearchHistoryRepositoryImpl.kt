@@ -18,7 +18,7 @@ class SearchHistoryRepositoryImpl(private val storage: StorageClient<ArrayList<T
 
         val tracks = storage.getData() ?: arrayListOf()
 
-        tracks.remove(track)
+        tracks.removeIf { it.id == track.id }
         tracks.add(0, track)
 
         if (tracks.size > MAX_HISTORY_SIZE) {

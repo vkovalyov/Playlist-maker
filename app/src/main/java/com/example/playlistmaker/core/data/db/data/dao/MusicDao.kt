@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MusicDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMusic(track: MusicEntity)
 

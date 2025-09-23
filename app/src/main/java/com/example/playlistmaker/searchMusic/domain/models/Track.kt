@@ -1,8 +1,6 @@
 package com.example.playlistmaker.searchMusic.domain.models
-
 import android.os.Parcelable
-import com.example.playlistmaker.media.vm.favorite.FavoriteState
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Track(

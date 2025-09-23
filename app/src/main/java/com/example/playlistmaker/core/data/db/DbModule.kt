@@ -2,6 +2,7 @@ package com.example.playlistmaker.core.data.db
 
 import androidx.room.Room
 import com.example.playlistmaker.core.data.db.data.converters.MusicDbConvertor
+import com.example.playlistmaker.core.data.db.data.dao.MusicDao
 import com.example.playlistmaker.core.data.db.data.repository.FavoriteMusicRepositoryImpl
 import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
 import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractorImpl
@@ -20,6 +21,7 @@ val dbModule = module {
         ).build()
     }
 
+    single { get<AppDatabase>().musicDao() }
     single<FavoriteMusicRepository> { FavoriteMusicRepositoryImpl(get(), get()) }
 
     factory { MusicDbConvertor() }

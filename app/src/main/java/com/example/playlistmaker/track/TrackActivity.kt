@@ -33,7 +33,7 @@ class TrackActivity : AppCompatActivity() {
     }
 
     private val track: Track by lazy {
-        intent.getParcelableExtra<Track>("TRACK_KEY")!!
+        intent.getParcelableExtra(TRACK)!!
     }
     private lateinit var binding: ActivityTrackBinding
 

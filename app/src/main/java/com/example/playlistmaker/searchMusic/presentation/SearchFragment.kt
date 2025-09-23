@@ -19,7 +19,7 @@ import com.example.playlistmaker.track.TrackActivity
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-const val TRACK = "track"
+const val TRACK = "TRACK_KEY"
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
@@ -38,7 +38,7 @@ class SearchFragment : Fragment() {
     private fun onClickTrack(track: Track) {
         viewModel.addHistory(track)
         val intent = Intent(requireContext(), TrackActivity::class.java)
-        intent.putExtra("TRACK_KEY", track)
+        intent.putExtra(TRACK, track)
         startActivity(intent)
     }
 

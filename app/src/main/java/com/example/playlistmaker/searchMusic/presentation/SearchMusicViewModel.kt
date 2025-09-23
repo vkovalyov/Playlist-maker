@@ -124,7 +124,6 @@ class SearchMusicViewModel(
                 }
         }
 
-
     }
 
     fun clearHistory() {

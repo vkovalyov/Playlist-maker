@@ -62,6 +62,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation ("com.markodevcic:peko:3.0.5")
     ksp("androidx.room:room-compiler:2.5.0")
+
 
 }

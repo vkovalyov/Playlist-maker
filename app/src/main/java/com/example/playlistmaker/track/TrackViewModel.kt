@@ -1,20 +1,14 @@
 package com.example.playlistmaker.track
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale

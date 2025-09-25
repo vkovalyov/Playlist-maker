@@ -2,4 +2,11 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.Material3.DayNight.NoActionBar">
     </style>
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+
+
+    <style name="AppTheme" parent="Theme.MaterialComponents">
+        <item name="snackbarStyle">@style/snackbar_style</item>
+        <item name="snackbarTextViewStyle">@style/snackbar_text</item>
+    </style>
+
 </resources>

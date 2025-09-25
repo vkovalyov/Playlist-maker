@@ -178,5 +178,96 @@
         <item name="itemTextAppearanceActiveBoldEnabled">false</item>
     </style>
 
+    <style name="Button.Create" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="strokeWidth">0dp</item>
 
+
+
+        android:textColor="@color/white"
+        app:backgroundTint="@color/grey"
+        app:cornerRadius="8dp"
+    </style>
+
+    <style name="Widget.App.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        app:backgroundTint="@color/grey"
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="elevation">0dp</item> <!-- Убираем тень, если не нужна -->
+    </style>
+
+    <style name="PlayListTitle">
+        <item name="android:textColor">@color/black_track</item>
+        <item name="android:textSize">@dimen/regular_s</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="BottomSheetTitle">
+        <item name="android:textColor">@color/black_track</item>
+        <item name="android:textSize">@dimen/medium_ys</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+    <style name="BottomSheetPlayListTitle">
+        <item name="android:textColor">@color/black_track</item>
+        <item name="android:textSize">@dimen/regular</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+    <style name="BottomSheetPlayListCount">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/regular_ys</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="BottomSheet">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="Toast">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/regular_sys</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="CreatePlayListEdit" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_stroke_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="hintTextColor">@color/grey</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="font">@font/ys_display_regular</item>
+    </style>
+
+    <style name="RoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+
+
+    <style name="snackbar_style" parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="android:layout_margin">7dp</item>
+        <item name="backgroundTint">@color/black</item>
+    </style>
+
+
+    <style name="snackbar_text" parent="@style/Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="font">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/regular_sys</item>
+    </style>
 </resources>

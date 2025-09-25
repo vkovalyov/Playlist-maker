@@ -2,7 +2,6 @@ package com.example.playlistmaker.track
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
 import android.widget.TextView
@@ -11,15 +10,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
-import com.example.playlistmaker.searchMusic.presentation.SearchMusicViewModel
 import com.example.playlistmaker.searchMusic.presentation.TRACK
-import com.google.gson.Gson
+import com.example.playlistmaker.track.bottomsheet.BottomSheetController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -31,6 +28,7 @@ class TrackActivity : AppCompatActivity() {
     private val trackViewModel: TrackViewModel by viewModel {
         parametersOf(track)
     }
+    private lateinit var bottomSheetController: BottomSheetController
 
     private val track: Track by lazy {
         intent.getParcelableExtra(TRACK)!!
@@ -70,6 +68,11 @@ class TrackActivity : AppCompatActivity() {
             .into(binding.trackLogo)
 
 
+        bottomSheetController = BottomSheetController(this, binding, track.id.toLong())
+        binding.addAlbum.setOnClickListener {
+            // bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetController.show()
+        }
 
         binding.trackName.text = track.trackName
         binding.trackGroup.text = track.artistName
@@ -129,6 +132,7 @@ class TrackActivity : AppCompatActivity() {
             trackViewModel.onPlayButtonClicked()
         }
     }
+
 
     private fun changeFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media
+package com.example.playlistmaker.media.favorite
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.databinding.TabFavoritesBinding
-import com.example.playlistmaker.media.vm.favorite.FavoriteState
-import com.example.playlistmaker.media.vm.favorite.FavoritesViewModel
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.searchMusic.presentation.TrackAdapter
 import com.example.playlistmaker.track.TrackActivity

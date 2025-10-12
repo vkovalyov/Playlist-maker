@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.create_playlist.CreatePlaylistActivity
 import com.example.playlistmaker.databinding.ActivityTrackBinding
+import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class BottomSheetController(
     private val activity: AppCompatActivity,
     private val binding: ActivityTrackBinding,
-    private val trackId: Long
+    private val track: Track
 
 ) {
     private val viewModel: BottomSheetViewModel by activity.viewModel()
@@ -26,7 +27,7 @@ class BottomSheetController(
     }
 
     private fun onClick(playListId: Long) {
-        viewModel.addToPlayList(playListId, trackId)
+        viewModel.addToPlayList(playListId, track)
     }
 
     init {

@@ -1,11 +1,6 @@
-package com.example.playlistmaker.core.data.db.data.entity
+package com.example.playlistmaker.core.data.db.domain.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "music_table")
-data class MusicEntity(
-    @PrimaryKey
+data class PlaylistTrack(
     val id: Long,
     val trackName: String,
     val artistName: String,
@@ -16,5 +11,5 @@ data class MusicEntity(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long
 )

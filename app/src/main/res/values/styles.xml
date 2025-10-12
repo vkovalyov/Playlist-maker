@@ -255,7 +255,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
     </style>
-
+    <style name="RoundedImagePlayList" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">2dp</item>
+    </style>
 
 
     <style name="snackbar_style" parent="@style/Widget.MaterialComponents.Snackbar">

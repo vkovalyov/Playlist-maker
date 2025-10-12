@@ -1,7 +1,8 @@
 package com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist
 
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
-import com.example.playlistmaker.core.data.db.domain.repository.FavoriteMusicRepository
+import com.example.playlistmaker.core.data.db.domain.models.PlaylistTrack
+import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import com.example.playlistmaker.core.data.db.domain.repository.PlayListRepository
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,7 @@ class PlayListInteractorImpl(
     private val repository: PlayListRepository
 ) : PlayListInteractor {
 
-    override fun getPlayList(): Flow<List<PlayList>> {
+    override suspend fun getPlayList(): List<PlayList> {
         return repository.getPlayList()
     }
 
@@ -20,5 +21,21 @@ class PlayListInteractorImpl(
 
     override suspend fun getPlaylistById(id: Long): PlayList? {
         return repository.getPlaylistById(id)
+    }
+
+    override suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks? {
+        return repository.getPlaylistWithTracks(playlistId)
+    }
+
+    override suspend fun getAllPlaylistWithTracks(): List<PlaylistWithTracks>? {
+        return repository.getAllPlaylistWithTracks()
+    }
+
+    override suspend fun addTrackToPlaylist(playlistId: Long, trackId: Long) {
+        return repository.addTrackToPlaylist(playlistId = playlistId, trackId = trackId)
+    }
+
+    override suspend fun insertToPlayList(track: Track) {
+        return repository.insertToPlayList(track)
     }
 }

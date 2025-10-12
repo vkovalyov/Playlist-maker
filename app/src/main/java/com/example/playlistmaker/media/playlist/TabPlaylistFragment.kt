@@ -12,10 +12,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
+import com.example.playlistmaker.core.utils.GridSpacingItemDecoration
 import com.example.playlistmaker.create_playlist.CreatePlaylistActivity
 import com.example.playlistmaker.databinding.TabPlalistsBinding
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+
+const val COUNT = 2
+const val HORIZONTAL_SPACING = 8
+const val VERTICAL_SPACING = 16
 
 
 class TabPlaylistFragment : Fragment() {
@@ -23,11 +29,6 @@ class TabPlaylistFragment : Fragment() {
 
     private val adapter = PlayListAdapter {
         onClick(it)
-    }
-
-    companion object {
-        fun newInstance() = TabPlaylistFragment().apply {
-        }
     }
 
     private fun onClick(playList: PlayList) {}
@@ -49,7 +50,20 @@ class TabPlaylistFragment : Fragment() {
             addPlaylistLauncher.launch(intent)
         }
 
-        binding.playList.layoutManager = GridLayoutManager(requireContext(), 2)
+        val density = resources.displayMetrics.density
+        val hSpacingPx = (HORIZONTAL_SPACING * density).toInt()
+        val vSpacingPx = (VERTICAL_SPACING * density).toInt()
+
+        binding.playList.layoutManager = GridLayoutManager(requireContext(), COUNT)
+        binding.playList.addItemDecoration(
+            GridSpacingItemDecoration(
+                spanCount = COUNT,
+                horizontalSpacing = hSpacingPx,
+                verticalSpacing = vSpacingPx
+            )
+        )
+
+
         binding.playList.adapter = adapter
 
         viewModel.getPlayList()
@@ -72,7 +86,7 @@ class TabPlaylistFragment : Fragment() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.getStringExtra("RESULT_MESSAGE")?.let { message ->
-
+                viewModel.getPlayList()
                 view?.let {
                     val snackbar = Snackbar.make(
                         binding.root,
@@ -86,6 +100,11 @@ class TabPlaylistFragment : Fragment() {
                     snackbar.show()
                 }
             }
+        }
+    }
+
+    companion object {
+        fun newInstance() = TabPlaylistFragment().apply {
         }
     }
 }

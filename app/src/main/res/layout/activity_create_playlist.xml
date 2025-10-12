@@ -36,15 +36,14 @@
             android:layout_width="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <com.example.playlistmaker.core.utils.SquareShapeableImageView
                 android:id="@+id/add_image"
+                android:layout_marginTop="26dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/RoundedImageView"
                 app:srcCompat="@drawable/add_placeholder" />
-
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/CreatePlayListEdit"

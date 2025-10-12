@@ -3,8 +3,8 @@ package com.example.playlistmaker.core.data.db.data.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "music_table")
-data class MusicEntity(
+@Entity(tableName = "playlist_tracks")
+data class PlaylistTrackEntity(
     @PrimaryKey
     val id: Long,
     val trackName: String,

@@ -32,8 +32,8 @@ val dbModule = module {
     factory { MusicDbConvertor() }
     factory { PlayListDbConvertor() }
 
-    single<FavoriteMusicInteractor> { FavoriteMusicInteractorImpl(get()) }
-    single<PlayListInteractor> { PlayListInteractorImpl(get()) }
+    factory<FavoriteMusicInteractor> { FavoriteMusicInteractorImpl(get()) }
+    factory<PlayListInteractor> { PlayListInteractorImpl(get()) }
 }
 
 

@@ -68,7 +68,7 @@ class TrackActivity : AppCompatActivity() {
             .into(binding.trackLogo)
 
 
-        bottomSheetController = BottomSheetController(this, binding, track.id.toLong())
+        bottomSheetController = BottomSheetController(this, binding, track)
         binding.addAlbum.setOnClickListener {
             // bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             bottomSheetController.show()

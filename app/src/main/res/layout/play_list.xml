@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playList"
+    android:layout_width="match_parent"
+    android:layout_height="61dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <com.example.playlistmaker.core.utils.SquareShapeableImageView
+        android:id="@+id/playlistImg"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/RoundedImagePlayList"
+        app:srcCompat="@drawable/placeholder" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            style="@style/BottomSheetPlayListTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="143234" />
+        <TextView
+            android:id="@+id/tracks_count"
+            style="@style/BottomSheetPlayListCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="23424" />
+    </LinearLayout>
+
+</LinearLayout>

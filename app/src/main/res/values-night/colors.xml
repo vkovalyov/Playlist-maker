@@ -11,4 +11,11 @@
 
     <color name="bottom_nav_unchecked">@color/white</color>
     <color name="bottom_nav_checked">@color/blue</color>
+
+    <color name="text_input_stroke_default">#FFFFFFFF</color>
+    <color name="text_input_stroke_focused">#3772E7</color>
+
+
+    <color name="button_enabled_color">#3772E7</color>
+    <color name="button_disabled_color">#AEAFB4</color>
 </resources>

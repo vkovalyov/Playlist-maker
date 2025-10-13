@@ -1,12 +1,10 @@
-package com.example.playlistmaker.media.vm.favorite
+package com.example.playlistmaker.media.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
 import kotlinx.coroutines.launch
 
 

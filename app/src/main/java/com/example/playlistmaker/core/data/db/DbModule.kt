@@ -2,11 +2,15 @@ package com.example.playlistmaker.core.data.db
 
 import androidx.room.Room
 import com.example.playlistmaker.core.data.db.data.converters.MusicDbConvertor
-import com.example.playlistmaker.core.data.db.data.dao.MusicDao
+import com.example.playlistmaker.core.data.db.data.converters.PlayListDbConvertor
 import com.example.playlistmaker.core.data.db.data.repository.FavoriteMusicRepositoryImpl
-import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
-import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractorImpl
+import com.example.playlistmaker.core.data.db.data.repository.PlayListRepositoryImpl
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractorImpl
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist.PlayListInteractor
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist.PlayListInteractorImpl
 import com.example.playlistmaker.core.data.db.domain.repository.FavoriteMusicRepository
+import com.example.playlistmaker.core.data.db.domain.repository.PlayListRepository
 import org.koin.android.ext.koin.androidContext
 
 
@@ -20,13 +24,16 @@ val dbModule = module {
             "database.db"
         ).build()
     }
-
     single { get<AppDatabase>().musicDao() }
+    single { get<AppDatabase>().playListDao() }
     single<FavoriteMusicRepository> { FavoriteMusicRepositoryImpl(get(), get()) }
+    single<PlayListRepository> { PlayListRepositoryImpl(get(), get()) }
 
     factory { MusicDbConvertor() }
+    factory { PlayListDbConvertor() }
 
-    single<FavoriteMusicInteractor> { FavoriteMusicInteractorImpl(get()) }
+    factory<FavoriteMusicInteractor> { FavoriteMusicInteractorImpl(get()) }
+    factory<PlayListInteractor> { PlayListInteractorImpl(get()) }
 }
 
 

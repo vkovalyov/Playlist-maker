@@ -3,7 +3,6 @@ package com.example.playlistmaker.core.data.db.data.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
 @Entity(tableName = "music_table")
 data class MusicEntity(
     @PrimaryKey

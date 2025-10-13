@@ -1,4 +1,4 @@
-package com.example.playlistmaker.core.data.db.domain.interactor
+package com.example.playlistmaker.core.data.db.domain.interactor.favorite
 
 import com.example.playlistmaker.core.data.db.domain.repository.FavoriteMusicRepository
 import com.example.playlistmaker.searchMusic.domain.models.Track

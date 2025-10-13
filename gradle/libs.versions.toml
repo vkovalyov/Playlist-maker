@@ -15,6 +15,8 @@ activity = "1.10.1"
 constraintlayout = "2.2.1"
 navigationFragmentKtxVersion = "2.5.3"
 navigationUiKtxVersion = "2.5.3"
+peko = "3.0.5"
+pekoVersion = "3.0.5"
 retrofitVersoin = "2.11.0"
 converterGsonVersion = "2.9.0"
 navigationFragmentKtx = "2.6.0"
@@ -35,6 +37,8 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersio
 koin-android-v353 = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+markodevcic-peko = { module = "com.markodevcic:peko", version.ref = "pekoVersion" }
+peko = { module = "implementation 'com.markodevcic:peko", version.ref = "peko" }
 retrofit = {module ="com.squareup.retrofit2:retrofit", version.ref = "retrofitVersoin"}
 converterGson = {module ="com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion"}
 koin = {module ="io.insert-koin:koin-android" , version.ref = "koinVersion"}

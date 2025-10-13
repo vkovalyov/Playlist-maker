@@ -1,11 +1,10 @@
 package com.example.playlistmaker.searchMusic.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.core.data.db.domain.interactor.FavoriteMusicInteractor
+import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
 import com.example.playlistmaker.searchMusic.domain.interactor.MusicInteractor
 import com.example.playlistmaker.searchMusic.domain.interactor.SearchHistoryInteractor
 import com.example.playlistmaker.searchMusic.domain.models.Track
@@ -57,8 +56,6 @@ class SearchMusicViewModel(
             renderState(SearchMusicState.Loading)
 
             viewModelScope.launch {
-
-
                 interactor.favoriteMusic()
                     .collect { tracks ->
                         val favoritesId: List<Int> = tracks.map { it.id }

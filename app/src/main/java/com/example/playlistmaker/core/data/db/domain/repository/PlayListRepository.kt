@@ -6,7 +6,7 @@ import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlayListRepository {
-    fun insert(playList: PlayList): Flow<Unit>
+    suspend fun insert(playList: PlayList): Long
     suspend fun getPlayList(): List<PlayList>
     suspend fun getPlaylistById(id: Long): PlayList?
     suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks?

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
 import com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist.PlayListInteractor
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
+import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.launch
 
 class PlayListViewModel(
@@ -21,6 +22,7 @@ class PlayListViewModel(
     fun deleteTrack(trackId: Long) {
         viewModelScope.launch {
             playListInteractor.removeTrackFromPlaylist(id, trackId)
+            getPlayList()
         }
     }
 
@@ -58,7 +60,7 @@ class PlayListViewModel(
         )
     }
 
-    fun editPlaylist(){
+    fun editPlaylist() {
         stateLiveData.postValue(
             PlayListState.EditPlayList(
                 playlistWithTracks = stateLiveData.value!!.playlistWithTracks,
@@ -69,7 +71,6 @@ class PlayListViewModel(
 
     fun getPlayList() {
         viewModelScope.launch {
-
             interactor.favoriteMusic()
                 .collect { tracks ->
                     val favoritesId: List<Int> = tracks.map { it.id }
@@ -77,7 +78,7 @@ class PlayListViewModel(
                     var timeMillis = 0
                     val playList = playListInteractor.getPlaylistWithTracks(id)
 
-                    val withFavorite = playList?.tracks?.map { entity ->
+                    var withFavorite = playList?.tracks?.map { entity ->
                         timeMillis += entity.trackTimeMillis
                         if (favoritesId.isNotEmpty()) {
                             if (favoritesId.contains(entity.id)) {
@@ -87,6 +88,9 @@ class PlayListViewModel(
                         entity
                     } ?: emptyList()
 
+                    if (withFavorite.size > 1) {
+                        withFavorite = withFavorite.reversed()
+                    }
                     stateLiveData.postValue(
                         PlayListState.Content(
                             playlistWithTracks = PlaylistWithTracks(

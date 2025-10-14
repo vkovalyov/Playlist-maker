@@ -2,11 +2,13 @@ package com.example.playlistmaker.media.playlist
 
 
 import android.content.res.Resources
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
@@ -23,9 +25,9 @@ class PlayListViewHolder(private val binding: PlayListGridBinding) :
 
         val count = context.resources.getQuantityString(R.plurals.tracks_count, model.tracksCount, model.tracksCount)
         binding.tracksCount.text = count
-
         Glide.with(itemView)
             .load(model.playlist.url)
+            .signature(ObjectKey(System.currentTimeMillis()))
             .centerInside()
             .centerCrop()
             .placeholder(R.drawable.placeholder)

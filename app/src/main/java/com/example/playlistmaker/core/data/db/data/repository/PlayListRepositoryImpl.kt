@@ -21,9 +21,8 @@ class PlayListRepositoryImpl(
 ) : PlayListRepository {
 
 
-    override fun insert(playList: PlayList): Flow<Unit> = flow {
-        playListDao.insertPlayList(playListDbConvertor.map(playList))
-        emit(Unit)
+    override suspend fun insert(playList: PlayList): Long  {
+       return playListDao.insertPlayList(playListDbConvertor.map(playList))
     }
 
     override suspend fun getPlayList(): List<PlayList> {

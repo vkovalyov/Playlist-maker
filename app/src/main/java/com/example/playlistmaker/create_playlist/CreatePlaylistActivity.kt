@@ -6,6 +6,7 @@ import android.R.attr.text
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -25,6 +26,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.databinding.ActivityCreatePlaylistBinding
@@ -86,7 +90,15 @@ class CreatePlaylistActivity : AppCompatActivity() {
                     if (it.uri == null) {
                         binding.addImage.setImageResource(R.drawable.add_image)
                     } else {
-                        binding.addImage.setImageURI(it.uri)
+                        Glide.with(binding.addImage)
+                            .load(it.uri.path)
+                            .signature(ObjectKey(System.currentTimeMillis()))
+                            .centerInside()
+                            .centerCrop()
+                            .placeholder(R.drawable.add_image)
+                            .error(R.drawable.add_image)
+                            .into(binding.addImage)
+                     //   binding.addImage.setImageURI(it.uri)
                     }
                     binding.trackName.setText(it.name)
                     binding.trackDescription.setText(it.description)
@@ -100,7 +112,15 @@ class CreatePlaylistActivity : AppCompatActivity() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.addImage.setImageURI(uri)
+                    //binding.addImage.setImageURI(uri)
+                    Glide.with(binding.addImage)
+                        .load(uri)
+                        .signature(ObjectKey(System.currentTimeMillis()))
+                        .centerInside()
+                        .centerCrop()
+                        .placeholder(R.drawable.add_image)
+                        .error(R.drawable.add_image)
+                        .into(binding.addImage)
                     viewModel.path = uri
                 }
             }

@@ -14,7 +14,7 @@ class PlayListInteractorImpl(
         return repository.getPlayList()
     }
 
-    override fun insert(playList: PlayList): Flow<Unit> {
+    override suspend fun insert(playList: PlayList): Long {
         return repository.insert(playList)
     }
 

@@ -2,6 +2,7 @@ package com.example.playlistmaker.playList
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.create_playlist.CreatePlaylistActivity
 import com.example.playlistmaker.create_playlist.PLAYLIST_KEY
@@ -157,6 +159,7 @@ class PlayListActivity : AppCompatActivity() {
                 is PlayListState.Content -> {
                     Glide.with(binding.playListImage)
                         .load(it.playlistWithTracks.playlist.url)
+                        .signature(ObjectKey(System.currentTimeMillis()))
                         .centerInside()
                         .centerCrop()
                         .placeholder(R.drawable.placeholder)
@@ -181,16 +184,14 @@ class PlayListActivity : AppCompatActivity() {
                     binding.playListInfo.text = "$totalTimeMinutes $minuteText • $trackText"
 
                     if (it.playlistWithTracks.tracksCount > 0) {
-
+                        binding.playlistIsEmpty.visibility = GONE
                         behavior.isHideable = false
                         behavior.skipCollapsed = true
                         behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        binding.recyclerTracks.visibility = VISIBLE
                         adapter.updateData(it.playlistWithTracks.tracks)
                     } else {
-                        behavior.skipCollapsed = false
-                        behavior.isHideable = true
-                        behavior.state = BottomSheetBehavior.STATE_HIDDEN
+                        binding.playlistIsEmpty.visibility = VISIBLE
+                        behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }
 
@@ -216,6 +217,7 @@ class PlayListActivity : AppCompatActivity() {
                     binding.playList.tracksCount.text = trackText
                     Glide.with(binding.playList.playlistImg)
                         .load(it.playlistWithTracks.playlist.url)
+                        .signature(ObjectKey(System.currentTimeMillis()))
                         .centerInside()
                         .centerCrop()
                         .placeholder(R.drawable.placeholder)

@@ -105,6 +105,7 @@
         android:paddingHorizontal="13dp"
         app:behavior_peekHeight="250dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <View
             android:layout_width="50dp"
             android:layout_height="4dp"
@@ -112,11 +113,21 @@
             android:layout_marginTop="10dp"
             android:background="@color/grey" />
 
+        <TextView
+            android:id="@+id/playlist_is_empty"
+            style="@style/ErrorTextStyle"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/playlist_is_empty"
+            android:textAlignment="center" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_tracks"
-            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="12dp"
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
@@ -129,36 +140,39 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/bottom_sheet_menu"
         android:layout_width="match_parent"
         android:layout_height="380dp"
         android:background="@drawable/bottom_sheet_round"
         android:orientation="vertical"
-        app:behavior_hideable="true"
         android:paddingHorizontal="18dp"
+        app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
         app:behavior_skipCollapsed="false"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <View
             android:layout_width="50dp"
             android:layout_height="4dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@color/grey" />
+
         <include
             android:id="@+id/playList"
             layout="@layout/play_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            />
+            android:layout_marginTop="24dp" />
+
         <TextView
             android:id="@+id/share_text"
-            android:layout_marginTop="8dp"
             style="@style/BottomSheetMenuItem"
             android:layout_width="wrap_content"
             android:layout_height="61dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/share_button"
             android:textSize="18sp" />

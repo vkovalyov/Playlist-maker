@@ -10,6 +10,7 @@ import com.example.playlistmaker.core.data.db.data.entity.PlayListEntity
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackCrossRef
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackEntity
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistWithTracksEntity
+import com.example.playlistmaker.core.data.db.data.entity.TrackWithCreatedAt
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import kotlinx.coroutines.flow.Flow
 
@@ -45,4 +46,16 @@ interface PlayListDao {
 
     @Update
     suspend fun updatePlaylist(playlist: PlayListEntity)
+
+
+    //todo я тут жести наделал. Надобыло создавать каждый раз новый трек без промежуточной таблицы
+    @Query("""
+        SELECT *, ref.createdAt 
+        FROM playlist_track_cross_ref AS ref
+        JOIN playlist_tracks AS t ON id = ref.trackId
+        WHERE ref.playlistId = :playlistId
+        ORDER BY ref.createdAt ASC
+    """)
+    suspend fun getTracksWithCreatedAt(playlistId: Long): List<TrackWithCreatedAt>
+
 }

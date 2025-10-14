@@ -34,14 +34,17 @@ class PlayListRepositoryImpl(
     }
 
     override suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks? {
+        val tracksWithCreatedAt=  playListDao.getTracksWithCreatedAt(playlistId)
         val entity = playListDao.getPlaylistWithTracks(playlistId) ?: return null
-        val tracks = entity.tracks.map { convertFromPlayListTrack(it) }
+
+        val tracks = tracksWithCreatedAt.map { convertFromPlayListTrack(it.track) }
         val playList = convertFromPlayList(entity.playlist)
         return PlaylistWithTracks(tracks = tracks, playlist = playList!!)
     }
 
     override fun getAllPlaylistWithTracks(): Flow<List<PlaylistWithTracks>> = flow {
         val entityList = playListDao.getAllPlaylistsWithTracks()
+
         entityList.collect {
             emit(it.map { entity ->
                 PlaylistWithTracks(
@@ -56,7 +59,8 @@ class PlayListRepositoryImpl(
         playListDao.addTrackToPlaylist(
             PlaylistTrackCrossRef(
                 playlistId = playlistId,
-                trackId = trackId
+                trackId = trackId,
+                createdAt = System.currentTimeMillis()
             )
         )
     }

@@ -190,6 +190,7 @@ class PlayListActivity : AppCompatActivity() {
                         behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         adapter.updateData(it.playlistWithTracks.tracks)
                     } else {
+                        adapter.updateData(it.playlistWithTracks.tracks)
                         binding.playlistIsEmpty.visibility = VISIBLE
                         behavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     }

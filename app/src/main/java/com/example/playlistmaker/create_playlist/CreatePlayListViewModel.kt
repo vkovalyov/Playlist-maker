@@ -12,32 +12,61 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist.PlayListInteractor
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
+import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.track.PlayerState
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
 class CreatePlayListViewModel(
+    private val playList: PlayList?,
     private val interactor: PlayListInteractor,
     private val application: Context
 ) : ViewModel() {
-    private val stateLiveData = MutableLiveData<CreatePlayListState>(CreatePlayListState.Content)
-    fun observePlayerState(): LiveData<CreatePlayListState> = stateLiveData
     var name: String = ""
     var description: String = ""
     var path: Uri? = null
+    private val stateLiveData = MutableLiveData<CreatePlayListState>(
+        CreatePlayListState.Content
+    )
+
+    fun observePlayerState(): LiveData<CreatePlayListState> = stateLiveData
+
+    init {
+        if (playList != null) {
+            name = playList.name
+            description = playList.description
+            if (playList.url.isNotEmpty()) {
+                path = Uri.parse(playList.url)
+            }
+            stateLiveData.postValue(
+                CreatePlayListState.EditContent(
+                    name = name,
+                    description = description,
+                    uri = path
+                )
+            )
+        }
+    }
 
     fun canBack(): Boolean {
         return name.isNotEmpty() || description.isNotEmpty() || path != null
     }
 
     fun createPLayList() {
+
         viewModelScope.launch {
             val url = saveImageToPrivateStorage(path, name)
-            interactor.insert(PlayList(0, name, description, url, "", 0))
-                .collect {
-                    stateLiveData.postValue(CreatePlayListState.Close(name))
-                }
+            if (playList == null) {
+                interactor.insert(PlayList(0, name, description, url, "", 0))
+                    .collect {
+                        stateLiveData.postValue(CreatePlayListState.Close(name))
+                    }
+            } else {
+                interactor.updatePlaylist(PlayList(playList.id, name, description, url, "", 0))
+                stateLiveData.postValue(CreatePlayListState.Close(name))
+
+            }
         }
     }
 

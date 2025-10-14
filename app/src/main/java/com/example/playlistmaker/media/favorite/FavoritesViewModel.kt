@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.data.db.domain.interactor.favorite.FavoriteMusicInteractor
 import kotlinx.coroutines.launch
 
-
 class FavoritesViewModel(private val favorite: FavoriteMusicInteractor) : ViewModel() {
     private val stateLiveData = MutableLiveData<FavoriteState>()
     fun observeState(): LiveData<FavoriteState> = stateLiveData
@@ -16,11 +15,6 @@ class FavoritesViewModel(private val favorite: FavoriteMusicInteractor) : ViewMo
     fun getFavorites() {
         viewModelScope.launch {
             favorite.favoriteMusic()
-//                .stateIn(
-//                    scope = viewModelScope,
-//                    started = SharingStarted.WhileSubscribed(5000),
-//                    initialValue = emptyList()
-//                )
                 .collect { favorite ->
                     renderState(FavoriteState.ContentFavorite(favorite))
                 }

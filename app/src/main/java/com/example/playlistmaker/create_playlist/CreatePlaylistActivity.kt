@@ -26,7 +26,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.playlistmaker.R
+import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.databinding.ActivityCreatePlaylistBinding
+import com.example.playlistmaker.searchMusic.domain.models.Track
+import com.example.playlistmaker.searchMusic.presentation.TRACK
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -35,10 +38,18 @@ import com.markodevcic.peko.PermissionResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
+const val PLAYLIST_KEY = "PLAYLIST_KEY"
 
 class CreatePlaylistActivity : AppCompatActivity() {
-    private val viewModel: CreatePlayListViewModel by viewModel()
+    private val viewModel: CreatePlayListViewModel by viewModel {
+        parametersOf(playList)
+    }
+
+    private val playList: PlayList? by lazy {
+        intent.getParcelableExtra(PLAYLIST_KEY)
+    }
 
     private lateinit var binding: ActivityCreatePlaylistBinding
     private val requester = PermissionRequester.instance()
@@ -68,8 +79,21 @@ class CreatePlaylistActivity : AppCompatActivity() {
 
         viewModel.observePlayerState().observe(this) {
             when (it) {
-                CreatePlayListState.Content -> {}
                 is CreatePlayListState.Close -> close(it.name)
+                is CreatePlayListState.CreateContent -> {}
+                is CreatePlayListState.EditContent -> {
+                    supportActionBar?.title = this.getString(R.string.edit)
+                    if (it.uri == null) {
+                        binding.addImage.setImageResource(R.drawable.add_image)
+                    } else {
+                        binding.addImage.setImageURI(it.uri)
+                    }
+                    binding.trackName.setText(it.name)
+                    binding.trackDescription.setText(it.description)
+                    binding.createPlaylist.text = this.getString(R.string.save)
+                }
+
+                CreatePlayListState.Content -> {}
             }
         }
 

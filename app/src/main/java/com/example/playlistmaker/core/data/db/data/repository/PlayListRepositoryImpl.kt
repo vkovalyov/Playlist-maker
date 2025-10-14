@@ -12,6 +12,7 @@ import com.example.playlistmaker.core.data.db.domain.repository.PlayListReposito
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 
 class PlayListRepositoryImpl(
@@ -40,13 +41,15 @@ class PlayListRepositoryImpl(
         return PlaylistWithTracks(tracks = tracks, playlist = playList!!)
     }
 
-    override suspend fun getAllPlaylistWithTracks(): List<PlaylistWithTracks> {
-        val entityList = playListDao.getAllPlaylistsWithTracks() ?: emptyList()
-        return entityList.map { entity ->
-            PlaylistWithTracks(
-                playlist = convertFromPlayList(entity.playlist)!!,
-                tracks = entity.tracks.map { trackEntity -> convertFromPlayListTrack(trackEntity) }
-            )
+    override fun getAllPlaylistWithTracks(): Flow<List<PlaylistWithTracks>> = flow {
+        val entityList = playListDao.getAllPlaylistsWithTracks()
+        entityList.collect {
+            emit(it.map { entity ->
+                PlaylistWithTracks(
+                    playlist = convertFromPlayList(entity.playlist)!!,
+                    tracks = entity.tracks.map { trackEntity -> convertFromPlayListTrack(trackEntity) }
+                )
+            })
         }
     }
 
@@ -63,7 +66,19 @@ class PlayListRepositoryImpl(
         playListDao.insertTrack(convertFromPlayListTrackEntity(track))
     }
 
-    private fun convertFromPlayListTrackEntity(model: Track):PlaylistTrackEntity  {
+    override suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long) {
+        playListDao.removeTrackFromPlaylist(playlistId, trackId)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Long) {
+        playListDao.deletePlaylistById(playlistId)
+    }
+
+    override suspend fun updatePlaylist(playlist: PlayList) {
+        playListDao.updatePlaylist(playListDbConvertor.map(playlist))
+    }
+
+    private fun convertFromPlayListTrackEntity(model: Track): PlaylistTrackEntity {
         return PlaylistTrackEntity(
             id = model.id.toLong(),
             trackName = model.trackName,
@@ -78,9 +93,9 @@ class PlayListRepositoryImpl(
         )
     }
 
-    private fun convertFromPlayListTrack(entity: PlaylistTrackEntity): PlaylistTrack {
-        return PlaylistTrack(
-            id = entity.id,
+    private fun convertFromPlayListTrack(entity: PlaylistTrackEntity): Track {
+        return Track(
+            id = entity.id.toInt(),
             trackName = entity.trackName,
             artistName = entity.artistName,
             trackTimeMillis = entity.trackTimeMillis,
@@ -90,7 +105,7 @@ class PlayListRepositoryImpl(
             primaryGenreName = entity.primaryGenreName,
             country = entity.country,
             previewUrl = entity.previewUrl,
-            createdAt = entity.createdAt
+            isFavorite = false
         )
     }
 

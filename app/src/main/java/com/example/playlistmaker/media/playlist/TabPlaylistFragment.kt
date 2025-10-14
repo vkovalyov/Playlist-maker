@@ -11,13 +11,14 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.playlistmaker.playList.PlayListActivity
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.core.utils.GridSpacingItemDecoration
 import com.example.playlistmaker.create_playlist.CreatePlaylistActivity
 import com.example.playlistmaker.databinding.TabPlalistsBinding
+import com.example.playlistmaker.playList.PLAY_LIST_ID_KEY
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 const val COUNT = 2
 const val HORIZONTAL_SPACING = 8
@@ -31,7 +32,11 @@ class TabPlaylistFragment : Fragment() {
         onClick(it)
     }
 
-    private fun onClick(playList: PlayList) {}
+    private fun onClick(playList: PlayList) {
+        val intent = Intent(requireContext(), PlayListActivity::class.java)
+        intent.putExtra(PLAY_LIST_ID_KEY, playList.id)
+        startActivity(intent)
+    }
 
     private lateinit var binding: TabPlalistsBinding
 

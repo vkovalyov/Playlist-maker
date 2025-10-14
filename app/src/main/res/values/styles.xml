@@ -273,4 +273,24 @@
         <item name="font">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/regular_sys</item>
     </style>
+
+
+    <style name="PlayListActivityTitle">
+        <item name="android:textColor">@color/black_track</item>
+        <item name="android:textSize">@dimen/big</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="fontWeight">700</item>
+    </style>
+
+    <style name="PlayListActivityDescription">
+        <item name="android:textColor">@color/black_track</item>
+        <item name="android:textSize">@dimen/medium_yx</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="BottomSheetMenuItem">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/regular</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
 </resources>

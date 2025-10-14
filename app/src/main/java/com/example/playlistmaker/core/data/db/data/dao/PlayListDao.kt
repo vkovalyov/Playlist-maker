@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.example.playlistmaker.core.data.db.data.entity.PlayListEntity
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackCrossRef
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackEntity
@@ -28,7 +29,7 @@ interface PlayListDao {
 
     @Transaction
     @Query("SELECT * FROM playlist_table")
-    suspend fun getAllPlaylistsWithTracks(): List<PlaylistWithTracksEntity>?
+    fun getAllPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: PlaylistTrackEntity): Long
@@ -36,4 +37,12 @@ interface PlayListDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTrackToPlaylist(crossRef: PlaylistTrackCrossRef)
 
+    @Query("DELETE FROM playlist_track_cross_ref WHERE playlistId = :playlistId AND trackId = :trackId")
+    suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
+
+    @Query("DELETE FROM playlist_table WHERE id = :playlistId")
+    suspend fun deletePlaylistById(playlistId: Long)
+
+    @Update
+    suspend fun updatePlaylist(playlist: PlayListEntity)
 }

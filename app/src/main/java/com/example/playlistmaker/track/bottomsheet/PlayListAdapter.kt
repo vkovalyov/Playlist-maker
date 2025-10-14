@@ -2,7 +2,6 @@ package com.example.playlistmaker.track.bottomsheet
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 
 class PlayListAdapter(

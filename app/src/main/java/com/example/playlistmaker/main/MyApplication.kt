@@ -5,6 +5,7 @@ import com.example.playlistmaker.core.data.coreModule
 import com.example.playlistmaker.core.data.db.dbModule
 import com.example.playlistmaker.create_playlist.createPlayListModule
 import com.example.playlistmaker.media.mediaModule
+import com.example.playlistmaker.playList.playListModule
 import com.example.playlistmaker.searchMusic.searchModule
 import com.example.playlistmaker.settings.settingsModule
 import com.example.playlistmaker.track.trackModule
@@ -28,7 +29,8 @@ class MyApplication : Application() {
                 mainModule,
                 mediaModule,
                 trackModule,
-                createPlayListModule
+                createPlayListModule,
+                playListModule
             )
         }
     }

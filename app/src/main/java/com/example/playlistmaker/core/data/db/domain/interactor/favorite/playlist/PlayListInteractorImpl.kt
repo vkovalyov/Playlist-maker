@@ -1,7 +1,6 @@
 package com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist
 
 import com.example.playlistmaker.core.data.db.domain.models.PlayList
-import com.example.playlistmaker.core.data.db.domain.models.PlaylistTrack
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import com.example.playlistmaker.core.data.db.domain.repository.PlayListRepository
 import com.example.playlistmaker.searchMusic.domain.models.Track
@@ -27,8 +26,8 @@ class PlayListInteractorImpl(
         return repository.getPlaylistWithTracks(playlistId)
     }
 
-    override suspend fun getAllPlaylistWithTracks(): List<PlaylistWithTracks>? {
-        return repository.getAllPlaylistWithTracks()
+    override fun getAllPlaylistWithTracks(): Flow<List<PlaylistWithTracks>> {
+      return  repository.getAllPlaylistWithTracks()
     }
 
     override suspend fun addTrackToPlaylist(playlistId: Long, trackId: Long) {
@@ -37,5 +36,17 @@ class PlayListInteractorImpl(
 
     override suspend fun insertToPlayList(track: Track) {
         return repository.insertToPlayList(track)
+    }
+
+    override suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long) {
+        return repository.removeTrackFromPlaylist(playlistId, trackId)
+    }
+
+    override suspend fun deletePlaylistById(playlistId: Long) {
+        return repository.deletePlaylistById(playlistId)
+    }
+
+    override suspend fun updatePlaylist(playlist: PlayList) {
+        return repository.updatePlaylist(playlist)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.core.data.db.data.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 
@@ -23,5 +24,11 @@ import androidx.room.ForeignKey
 )
 data class PlaylistTrackCrossRef(
     val playlistId: Long,
-    val trackId: Long
+    val trackId: Long,
+    val createdAt: Long
+)
+
+data class TrackWithCreatedAt(
+    @Embedded val track: PlaylistTrackEntity,
+    val createdAt: Long
 )

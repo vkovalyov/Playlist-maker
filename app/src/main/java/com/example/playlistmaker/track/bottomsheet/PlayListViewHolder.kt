@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import com.example.playlistmaker.databinding.PlayListBinding
@@ -25,6 +26,7 @@ class PlayListViewHolder(private val binding: PlayListBinding) :
         Glide.with(itemView)
             .load(model.playlist.url)
             .centerInside()
+            .signature(ObjectKey(System.currentTimeMillis()))
             .centerCrop()
             .placeholder(R.drawable.placeholder)
             .error(R.drawable.placeholder)

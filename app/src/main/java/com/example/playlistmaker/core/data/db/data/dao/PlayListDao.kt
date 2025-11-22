@@ -5,17 +5,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.example.playlistmaker.core.data.db.data.entity.PlayListEntity
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackCrossRef
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistTrackEntity
 import com.example.playlistmaker.core.data.db.data.entity.PlaylistWithTracksEntity
+import com.example.playlistmaker.core.data.db.data.entity.TrackWithCreatedAt
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlayListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlayList(track: PlayListEntity)
+    suspend fun insertPlayList(track: PlayListEntity):Long
 
     @Query("SELECT * FROM playlist_table")
     suspend fun getPlayList(): List<PlayListEntity>
@@ -28,12 +30,32 @@ interface PlayListDao {
 
     @Transaction
     @Query("SELECT * FROM playlist_table")
-    suspend fun getAllPlaylistsWithTracks(): List<PlaylistWithTracksEntity>?
+    fun getAllPlaylistsWithTracks(): Flow<List<PlaylistWithTracksEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: PlaylistTrackEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTrackToPlaylist(crossRef: PlaylistTrackCrossRef)
+
+    @Query("DELETE FROM playlist_track_cross_ref WHERE playlistId = :playlistId AND trackId = :trackId")
+    suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
+
+    @Query("DELETE FROM playlist_table WHERE id = :playlistId")
+    suspend fun deletePlaylistById(playlistId: Long)
+
+    @Update
+    suspend fun updatePlaylist(playlist: PlayListEntity)
+
+
+    //todo я тут жести наделал. Надобыло создавать каждый раз новый трек без промежуточной таблицы
+    @Query("""
+        SELECT *, ref.createdAt 
+        FROM playlist_track_cross_ref AS ref
+        JOIN playlist_tracks AS t ON id = ref.trackId
+        WHERE ref.playlistId = :playlistId
+        ORDER BY ref.createdAt ASC
+    """)
+    suspend fun getTracksWithCreatedAt(playlistId: Long): List<TrackWithCreatedAt>
 
 }

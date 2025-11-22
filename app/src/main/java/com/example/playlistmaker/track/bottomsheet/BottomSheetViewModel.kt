@@ -5,47 +5,42 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.core.data.db.domain.interactor.favorite.playlist.PlayListInteractor
-import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.core.data.db.domain.models.PlaylistWithTracks
 import com.example.playlistmaker.searchMusic.domain.models.Track
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 
 class BottomSheetViewModel(private val interactor: PlayListInteractor) :
     ViewModel() {
     private val stateLiveData = MutableLiveData<BottomSheetState>()
     fun observeState(): LiveData<BottomSheetState> = stateLiveData
-    private val gson = Gson()
+    private var plaLists: List<PlaylistWithTracks> = emptyList()
 
     fun getPlayList() {
         viewModelScope.launch {
-            val playlist = interactor.getAllPlaylistWithTracks()
-            renderState(playlist ?: emptyList())
+            interactor.getAllPlaylistWithTracks().collect { plyList ->
+                renderState(plyList)
+            }
         }
     }
-
 
     fun addToPlayList(playListId: Long, track: Track) {
         viewModelScope.launch {
-            interactor.insertToPlayList(track)
-            interactor.addTrackToPlaylist(playListId, track.id.toLong())
-            getPlayList()
+            val playlist = plaLists.find { it.playlist.id == playListId }
+            val findTrack = playlist?.tracks?.find { it.id == track.id }
+            if (findTrack == null) {
+                interactor.insertToPlayList(track)
+                interactor.addTrackToPlaylist(playListId, track.id.toLong())
+                getPlayList()
+                stateLiveData.postValue(BottomSheetState.SuccessAdd(playlist?.playlist?.name ?: ""))
+            } else {
+                stateLiveData.postValue(BottomSheetState.FailedAdd(playlist.playlist?.name ?: ""))
+            }
         }
 
     }
 
-    private fun listToJson(list: List<Long>): String {
-        return gson.toJson(list)
-    }
-
-    private fun jsonToList(json: String): MutableList<Long> {
-        if (json.isEmpty()) return mutableListOf()
-        val listType = object : TypeToken<List<Long>>() {}.type
-        return gson.fromJson(json, listType)
-    }
-
     private fun renderState(state: List<PlaylistWithTracks>) {
+        plaLists = state
         stateLiveData.postValue(BottomSheetState.ContentPlayList(state))
     }
 

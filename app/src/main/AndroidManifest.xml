@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
     <application
@@ -19,9 +20,12 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".create_playlist.CreatePlaylistActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:name=".playList.PlayListActivity"
             android:exported="false" />
+        <activity
+            android:name=".create_playlist.CreatePlaylistActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".track.TrackActivity"
             android:exported="false" />

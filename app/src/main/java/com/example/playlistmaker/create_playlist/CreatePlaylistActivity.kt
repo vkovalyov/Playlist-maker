@@ -6,6 +6,7 @@ import android.R.attr.text
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -25,8 +26,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.signature.ObjectKey
 import com.example.playlistmaker.R
+import com.example.playlistmaker.core.data.db.domain.models.PlayList
 import com.example.playlistmaker.databinding.ActivityCreatePlaylistBinding
+import com.example.playlistmaker.searchMusic.domain.models.Track
+import com.example.playlistmaker.searchMusic.presentation.TRACK
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -35,10 +42,18 @@ import com.markodevcic.peko.PermissionResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
+const val PLAYLIST_KEY = "PLAYLIST_KEY"
 
 class CreatePlaylistActivity : AppCompatActivity() {
-    private val viewModel: CreatePlayListViewModel by viewModel()
+    private val viewModel: CreatePlayListViewModel by viewModel {
+        parametersOf(playList)
+    }
+
+    private val playList: PlayList? by lazy {
+        intent.getParcelableExtra(PLAYLIST_KEY)
+    }
 
     private lateinit var binding: ActivityCreatePlaylistBinding
     private val requester = PermissionRequester.instance()
@@ -68,15 +83,44 @@ class CreatePlaylistActivity : AppCompatActivity() {
 
         viewModel.observePlayerState().observe(this) {
             when (it) {
-                CreatePlayListState.Content -> {}
                 is CreatePlayListState.Close -> close(it.name)
+                is CreatePlayListState.CreateContent -> {}
+                is CreatePlayListState.EditContent -> {
+                    supportActionBar?.title = this.getString(R.string.edit)
+                    if (it.uri == null) {
+                        binding.addImage.setImageResource(R.drawable.add_image)
+                    } else {
+                        Glide.with(binding.addImage)
+                            .load(it.uri.path)
+                            .signature(ObjectKey(System.currentTimeMillis()))
+                            .centerInside()
+                            .centerCrop()
+                            .placeholder(R.drawable.add_image)
+                            .error(R.drawable.add_image)
+                            .into(binding.addImage)
+                     //   binding.addImage.setImageURI(it.uri)
+                    }
+                    binding.trackName.setText(it.name)
+                    binding.trackDescription.setText(it.description)
+                    binding.createPlaylist.text = this.getString(R.string.save)
+                }
+
+                CreatePlayListState.Content -> {}
             }
         }
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.addImage.setImageURI(uri)
+                    //binding.addImage.setImageURI(uri)
+                    Glide.with(binding.addImage)
+                        .load(uri)
+                        .signature(ObjectKey(System.currentTimeMillis()))
+                        .centerInside()
+                        .centerCrop()
+                        .placeholder(R.drawable.add_image)
+                        .error(R.drawable.add_image)
+                        .into(binding.addImage)
                     viewModel.path = uri
                 }
             }

@@ -87,7 +87,6 @@ class TrackActivity : AppCompatActivity() {
         if (track.collectionName == null) {
             binding.albumGroup.visibility = GONE
         } else {
-            val album = findViewById<TextView>(R.id.album_track)
             binding.albumTrack.text = track.collectionName
         }
 
@@ -118,9 +117,8 @@ class TrackActivity : AppCompatActivity() {
         }
 
 
-
         trackViewModel.observePlayerState().observe(this) {
-            changeButton(it.isPlayButtonEnabled)
+            binding.playButton.setPlaying(it.isPlayButtonEnabled)
             binding.lastDuration.text = it.progress
         }
 
@@ -129,25 +127,16 @@ class TrackActivity : AppCompatActivity() {
             trackViewModel.onFavoriteClicked(track)
         }
 
-        binding.play.setOnClickListener {
+        binding.playButton.onTogglePlayback = { isPlaying ->
             trackViewModel.onPlayButtonClicked()
         }
     }
-
 
     private fun changeFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
             binding.favorite.setImageResource(R.drawable.favorite_pressed)
         } else {
             binding.favorite.setImageResource(R.drawable.favorite_disabled)
-        }
-    }
-
-    private fun changeButton(isPlaying: Boolean) {
-        if (isPlaying) {
-            binding.play.setImageResource(R.drawable.pause)
-        } else {
-            binding.play.setImageResource(R.drawable.play)
         }
     }
 

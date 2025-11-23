@@ -1,11 +1,19 @@
 package com.example.playlistmaker.track
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.core.service.MusicService
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.searchMusic.domain.models.Track
 import com.example.playlistmaker.searchMusic.presentation.TRACK
@@ -34,6 +43,17 @@ class TrackActivity : AppCompatActivity() {
         intent.getParcelableExtra(TRACK)!!
     }
 
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            trackViewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            trackViewModel.removeAudioPlayerControl()
+        }
+    }
+
     private lateinit var binding: ActivityTrackBinding
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -53,6 +73,15 @@ class TrackActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
+        trackViewModel.observePlayerState().observe(this) {
+            updateButtonAndProgress(it)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
 
         Glide.with(binding.trackLogo)
             .load(
@@ -71,7 +100,6 @@ class TrackActivity : AppCompatActivity() {
 
         bottomSheetController = BottomSheetController(this, binding, track)
         binding.addAlbum.setOnClickListener {
-            // bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             bottomSheetController.show()
         }
 
@@ -116,19 +144,12 @@ class TrackActivity : AppCompatActivity() {
             changeFavoriteButton(it)
         }
 
-
-        trackViewModel.observePlayerState().observe(this) {
-            binding.playButton.setPlaying(it.isPlayButtonEnabled)
-            binding.lastDuration.text = it.progress
-        }
-
         binding.favorite.setOnClickListener {
-
             trackViewModel.onFavoriteClicked(track)
         }
 
         binding.playButton.onTogglePlayback = { isPlaying ->
-            trackViewModel.onPlayButtonClicked()
+            trackViewModel.onPlayerButtonClicked()
         }
     }
 
@@ -149,8 +170,50 @@ class TrackActivity : AppCompatActivity() {
     }
 
 
-    override fun onPause() {
-        super.onPause()
-        trackViewModel.pausePlayer()
+    override fun onStart() {
+        trackViewModel.hiddenNotification()
+        super.onStart()
+    }
+    override fun onStop() {
+        super.onStop()
+        trackViewModel.showNotification()
+    }
+
+//    override fun onPause() {
+//        trackViewModel.showNotification()
+//        super.onPause()
+//    }
+    override fun onDestroy() {
+        trackViewModel.hiddenNotification()
+        unbindMusicService()
+        super.onDestroy()
+    }
+
+
+    private fun bindMusicService() {
+        val intent = Intent(this, MusicService::class.java).apply {
+            putExtra("song_url", track.previewUrl)
+        }
+
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        unbindService(serviceConnection)
+    }
+
+    private fun updateButtonAndProgress(playerState: PlayerState) {
+        binding.playButton.setPlaying(playerState.isPlayButtonEnabled)
+        binding.lastDuration.text = playerState.progress
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService()
+        } else {
+            Toast.makeText(this, "Вы не дали разрешений", Toast.LENGTH_LONG).show()
+        }
     }
 }

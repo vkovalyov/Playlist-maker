@@ -174,15 +174,12 @@ class TrackActivity : AppCompatActivity() {
         trackViewModel.hiddenNotification()
         super.onStart()
     }
+
     override fun onStop() {
         super.onStop()
         trackViewModel.showNotification()
     }
 
-//    override fun onPause() {
-//        trackViewModel.showNotification()
-//        super.onPause()
-//    }
     override fun onDestroy() {
         trackViewModel.hiddenNotification()
         unbindMusicService()
@@ -193,6 +190,8 @@ class TrackActivity : AppCompatActivity() {
     private fun bindMusicService() {
         val intent = Intent(this, MusicService::class.java).apply {
             putExtra("song_url", track.previewUrl)
+            putExtra("trackName", track.trackName)
+            putExtra("artist", track.artistName)
         }
 
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)

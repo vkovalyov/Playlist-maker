@@ -36,12 +36,15 @@ class MusicService : Service(), AudioPlayerControl {
     private val _playerState = MutableStateFlow<PlayerState>(PlayerState.Default())
 
     private var songUrl = ""
+    private var trackName = ""
+    private var artist = ""
 
     private var mediaPlayer: MediaPlayer? = null
 
     private var timerJob: Job? = null
 
     private fun startTimer() {
+        timerJob?.cancel()
         timerJob = CoroutineScope(Dispatchers.Default).launch {
             while (mediaPlayer?.isPlaying == true) {
                 delay(200L)
@@ -61,6 +64,8 @@ class MusicService : Service(), AudioPlayerControl {
 
     override fun onBind(intent: Intent?): IBinder {
         songUrl = intent?.getStringExtra("song_url") ?: ""
+        trackName = intent?.getStringExtra("trackName") ?: ""
+        artist = intent?.getStringExtra("artist") ?: ""
         initMediaPlayer()
         return binder
     }
@@ -159,7 +164,7 @@ class MusicService : Service(), AudioPlayerControl {
         ServiceCompat.startForeground(
             this,
             SERVICE_NOTIFICATION_ID,
-            createServiceNotification(title, description),
+            createServiceNotification(title, "$artist - $trackName"),
             getForegroundServiceTypeConstant()
         )
     }

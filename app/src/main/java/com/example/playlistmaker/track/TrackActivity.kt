@@ -151,7 +151,6 @@ class TrackActivity : AppCompatActivity() {
             trackViewModel.onPlayerButtonClicked()
         }
     }
-
     private fun changeFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
             binding.favorite.setImageResource(R.drawable.favorite_pressed)

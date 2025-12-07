@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -66,12 +69,12 @@ fun PlayListScreen(
             })
 
         if (playLists.isEmpty()) {
-            Column() {
+            Column {
                 Spacer(Modifier.height(46.dp))
                 EmptyPlayList()
             }
         } else {
-            Column() {
+            Column {
                 Spacer(Modifier.height(16.dp))
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -81,7 +84,10 @@ fun PlayListScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(playLists) { playList ->
-                        Box(Modifier.clickable(onClick = { onClickPlaylist(playList.playlist) })) {
+                        Box(
+                            Modifier.clickable(
+                                onClick = { onClickPlaylist(playList.playlist) })
+                        ) {
                             TrackGridItem(playList)
                         }
                     }
@@ -95,18 +101,20 @@ fun PlayListScreen(
 @Composable
 fun TrackGridItem(playList: PlaylistWithTracks) {
     val tracksCount = pluralStringResource(
-        id = R.plurals.tracks_count,
-        count = playList.tracksCount,
-        playList.tracksCount
+        id = R.plurals.tracks_count, count = playList.tracksCount, playList.tracksCount
     )
     Column {
         Box(
-            modifier = Modifier.clip(RoundedCornerShape(8.dp))
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .fillMaxWidth()
+                .aspectRatio(1f)
         ) {
             AsyncImage(
                 model = playList.playlist.url,
                 contentDescription = null,
-                modifier = Modifier.size(160.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit,
                 placeholder = painterResource(R.drawable.placeholder),
                 error = painterResource(R.drawable.placeholder)
 

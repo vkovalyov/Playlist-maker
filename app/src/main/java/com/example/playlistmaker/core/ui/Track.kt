@@ -34,6 +34,8 @@ import java.util.Locale
 fun TrackListElement(track: Track, onClick: (Track) -> Unit) {
     val colors = LocalAppColors.current
     val trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+    val description = remember { "${track.artistName} • $trackTime" }
+
     Row(
 
         modifier = Modifier
@@ -68,7 +70,7 @@ fun TrackListElement(track: Track, onClick: (Track) -> Unit) {
             Text(track.trackName, style = AppTextStyle.TrackListTitle.toTextStyle())
             Spacer(Modifier.heightIn(1.dp))
             Text(
-                "${track.artistName} • $trackTime",
+                description,
                 style = AppTextStyle.TrackListDescription.toTextStyle()
             )
         }

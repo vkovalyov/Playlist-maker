@@ -23,9 +23,13 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -83,7 +87,10 @@ class MediaActivity : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        return ComposeView(requireContext()).apply {
+        val composeView = ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
             setContent {
                 AppTheme {
                     Scaffold(
@@ -107,6 +114,8 @@ class MediaActivity : Fragment() {
                 }
             }
         }
+        return composeView
+
     }
 
 }
@@ -123,6 +132,12 @@ fun MediaScreen(
     val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex = pagerState.currentPage
     val colors = LocalAppColors.current
+
+    val selectedTab by remember {
+        derivedStateOf {
+            selectedTabIndex == 0
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -148,7 +163,7 @@ fun MediaScreen(
         ) {
             Tab(
                 modifier = Modifier.background(colors.background),
-                selected = selectedTabIndex == 0,
+                selected = selectedTab,
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = MaterialTheme.colorScheme.outline,
                 onClick = {
@@ -166,7 +181,7 @@ fun MediaScreen(
 
             Tab(
                 modifier = Modifier.background(colors.background),
-                selected = selectedTabIndex == 1,
+                selected = selectedTab,
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = MaterialTheme.colorScheme.outline,
                 onClick = {

@@ -41,6 +41,7 @@ fun SearchBar(viewModel: SearchMusicViewModel, query: String, onValueChange: (St
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val colors = LocalAppColors.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,7 +61,7 @@ fun SearchBar(viewModel: SearchMusicViewModel, query: String, onValueChange: (St
             BasicTextField(
                 value = query,
                 onValueChange = { newValue ->
-                    viewModel.search(query)
+                    viewModel.search(newValue)
                     onValueChange(newValue)
                 },
                 keyboardActions = KeyboardActions(onDone = {
@@ -88,25 +89,27 @@ fun SearchBar(viewModel: SearchMusicViewModel, query: String, onValueChange: (St
             }
 
         }
-        Icon(
-            modifier = Modifier.clickable(
-                interactionSource = MutableInteractionSource(),
-                indication = null,
-            ) {
-                val imm =
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                val view = (context as? Activity)?.currentFocus
-                view?.let {
-                    imm.hideSoftInputFromWindow(it.windowToken, 0)
-                }
-                onValueChange("")
-                viewModel.updateHistory()
+        if (query.isNotEmpty()) {
+            Icon(
+                modifier = Modifier.clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                ) {
+                    val imm =
+                        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    val view = (context as? Activity)?.currentFocus
+                    view?.let {
+                        imm.hideSoftInputFromWindow(it.windowToken, 0)
+                    }
+                    onValueChange("")
+                    viewModel.updateHistory()
 
-            },
-            painter = painterResource(id = R.drawable.close),
-            contentDescription = null,
-            tint = colors.textFieldIcon
-        )
+                },
+                painter = painterResource(id = R.drawable.close),
+                contentDescription = null,
+                tint = colors.textFieldIcon
+            )
+        }
     }
 
 }

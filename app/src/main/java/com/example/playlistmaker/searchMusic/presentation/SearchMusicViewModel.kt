@@ -32,7 +32,7 @@ class SearchMusicViewModel(
         if (latestSearchText == changedText) {
             return
         }
-        searchRequest(changedText)
+        searchDebounce(changedText)
 
     }
 

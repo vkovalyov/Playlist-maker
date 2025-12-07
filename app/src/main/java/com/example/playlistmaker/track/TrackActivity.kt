@@ -8,7 +8,6 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
 import android.widget.Toast
@@ -152,7 +151,6 @@ class TrackActivity : AppCompatActivity() {
             trackViewModel.onPlayerButtonClicked()
         }
     }
-
     private fun changeFavoriteButton(isFavorite: Boolean) {
         if (isFavorite) {
             binding.favorite.setImageResource(R.drawable.favorite_pressed)

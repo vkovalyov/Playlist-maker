@@ -16,7 +16,4 @@ sealed interface SearchMusicState {
     ) : SearchMusicState
 
     data object Error : SearchMusicState
-
-    data object Empty : SearchMusicState
-
 }
